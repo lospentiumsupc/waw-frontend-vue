@@ -30,5 +30,10 @@ module.exports = {
     "no-multi-str": ["error"],
     "require-await": ["error"],
     "spaced-comment": ["error"],
+    "vue/eqeqeq": ["error"],
+    "vue/camelcase": ["error"],
+    "vue/prefer-template": ["warn"],
+    "vue/no-template-target-blank": ["warn"],
+    "vue/no-static-inline-styles": ["warn"],
   },
 };
