@@ -26,6 +26,9 @@ import { RouterLink, RouterView } from "vue-router";
 </template>
 
 <style>
+@import "primevue/resources/themes/mdc-light-indigo/theme.css";
+@import "primevue/resources/primevue.css";
+@import "primeicons/primeicons.css";
 @import "@/assets/base.css";
 
 #app {
