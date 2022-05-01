@@ -24,7 +24,6 @@ module.exports = {
     "no-constructor-return": ["error"],
     "no-self-compare": ["error"],
     "no-unreachable-loop": ["error"],
-    "multiline-comment-style": ["error", "starred-block"],
     "no-else-return": ["error", { allowElseIf: false }],
     "no-lonely-if": ["error"],
     "no-multi-assign": ["error"],
