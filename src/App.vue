@@ -18,6 +18,7 @@ import { RouterLink, RouterView } from "vue-router";
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/test">Test</RouterLink>
       </nav>
     </div>
   </header>
@@ -26,6 +27,9 @@ import { RouterLink, RouterView } from "vue-router";
 </template>
 
 <style>
+@import "primevue/resources/themes/mdc-light-indigo/theme.css";
+@import "primevue/resources/primevue.css";
+@import "primeicons/primeicons.css";
 @import "@/assets/base.css";
 
 #app {
