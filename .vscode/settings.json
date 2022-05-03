@@ -19,5 +19,8 @@
   },
   "yaml.schemas": {
     "https://json.schemastore.org/github-issue-config.json": ".github/ISSUE_TEMPLATE/config.yml"
-  }
+  },
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false
 }
