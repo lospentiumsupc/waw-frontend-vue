@@ -54,10 +54,18 @@ const selectedLang = ref(languages[0]);
       <span class="mb-4 text-sm font-light">Language</span>
       <Dropdown
         v-model="selectedLang"
-        class="text-xs"
+        class="lang-selector w-32"
+        panel-class="text-xs"
         :options="languages"
         option-label="label"
         :placeholder="selectedLang.label" />
     </div>
   </footer>
 </template>
+
+<style>
+.lang-selector > span,
+.lang-selector > div[role="button"] {
+  @apply text-xs;
+}
+</style>
