@@ -7,6 +7,26 @@ module.exports = {
     "stylelint-config-prettier",
   ],
   rules: {
+    "at-rule-no-unknown": [
+      true,
+      {
+        ignoreAtRules: [
+          "tailwind",
+          "apply",
+          "variants",
+          "responsive",
+          "screen",
+          "layer",
+          "append",
+        ],
+      },
+    ],
+    "function-no-unknown": [
+      true,
+      {
+        ignoreFunctions: ["theme"],
+      },
+    ],
     "declaration-no-important": true,
   },
   ignoreFiles: ["node_modules/**/*.css", "src/**/*.js"],

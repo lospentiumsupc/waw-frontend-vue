@@ -5,6 +5,7 @@
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
     "EditorConfig.EditorConfig",
-    "redhat.vscode-yaml"
+    "redhat.vscode-yaml",
+    "bradlc.vscode-tailwindcss"
   ]
 }
