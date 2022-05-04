@@ -2,6 +2,30 @@
 import Dropdown from "primevue/dropdown";
 import { ref } from "vue";
 
+const navigation = [
+  {
+    label: "Company",
+    items: [
+      { label: "About" },
+      { label: "Careers" },
+      { label: "Advertising" },
+      { label: "Small Business" },
+    ],
+  },
+  {
+    label: "Help",
+    items: [
+      { label: "Safety Center" },
+      { label: "Knowledge Base" },
+      { label: "Contact Us" },
+    ],
+  },
+  {
+    label: "Legal",
+    items: [{ label: "Community Guidelines" }, { label: "Privacy & Terms" }],
+  },
+];
+
 const languages = [
   { label: "English", code: "en_US" },
   { label: "Spanish", code: "es_PE" },
@@ -16,20 +40,14 @@ const selectedLang = ref(languages[0]);
       <span class="text-sm font-light">© Future Leaders Inc., 2022</span>
     </div>
     <nav class="space-x-24 flex text-xs text-slate-800">
-      <div class="space-y-4 flex flex-col">
-        <span>About</span>
-        <span>Careers</span>
-        <span>Advertising</span>
-        <span>Small Business</span>
-      </div>
-      <div class="space-y-4 flex flex-col">
-        <span>Safety Center</span>
-        <span>Knowledge Base</span>
-        <span>Contact Us</span>
-      </div>
-      <div class="space-y-4 flex flex-col">
-        <span>Community Guidelines</span>
-        <span>Privacy & Terms</span>
+      <div
+        v-for="group in navigation"
+        :key="group.label"
+        class="space-y-4 flex flex-col">
+        <span class="font-medium">{{ group.label }}</span>
+        <span v-for="link in group.items" :key="link.label">{{
+          link.label
+        }}</span>
       </div>
     </nav>
     <div class="flex flex-col">
