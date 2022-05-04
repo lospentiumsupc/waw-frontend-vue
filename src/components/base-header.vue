@@ -3,7 +3,7 @@ import Menu from "primevue/menu";
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
 import { ref } from "vue";
-import { RouterLink } from "vue-router";
+// import { RouterLink } from "vue-router";
 
 const navigation = [
   { label: "Home", path: "/", icon: PrimeIcons.HOME },
@@ -24,12 +24,12 @@ const accountMenu = [
       {
         label: "Options",
         icon: PrimeIcons.COG,
-        to: "/account",
+        // to: "/account",
       },
       {
         label: "Sign Out",
         icon: PrimeIcons.POWER_OFF,
-        to: "/logout",
+        // to: "/logout",
       },
     ],
   },
@@ -52,7 +52,7 @@ const search = ref("");
       <span class="h-full w-0 border-l border-slate-200"></span>
       <nav>
         <ul class="flex text-center space-x-12">
-          <RouterLink
+          <!-- <RouterLink
             v-for="item in navigation"
             :key="item.path"
             :to="item.path"
@@ -63,7 +63,16 @@ const search = ref("");
                 {{ item.label }}
               </span>
             </li>
-          </RouterLink>
+          </RouterLink> -->
+          <li
+            v-for="item in navigation"
+            :key="item.path"
+            class="flex flex-col space-y-2">
+            <i :class="item.icon" class="text-xl"></i>
+            <span class="text-xs font-medium uppercase">
+              {{ item.label }}
+            </span>
+          </li>
         </ul>
       </nav>
     </div>
