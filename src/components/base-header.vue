@@ -11,26 +11,32 @@ const navigation = [
   { label: "Notices", path: "/notifications", icon: PrimeIcons.BELL },
 ];
 
-const refMenu = ref();
+/**
+ * @type {import("vue").Ref<import("primevue/menu").default>}
+ */
+const menuRef = ref();
+/**
+ * @param {MouseEvent} event
+ */
 const toggleMenu = event => {
-  refMenu.value.toggle(event);
+  menuRef.value.toggle(event);
 };
+
+/**
+ * @type {import("primevue/menuitem").MenuItem[]}
+ */
 const accountMenu = [
   {
-    label: "Account",
+    label: "Profile",
     icon: PrimeIcons.USER,
-    items: [
-      {
-        label: "Options",
-        icon: PrimeIcons.COG,
-        // to: "/account",
-      },
-      {
-        label: "Sign Out",
-        icon: PrimeIcons.POWER_OFF,
-        // to: "/logout",
-      },
-    ],
+  },
+  {
+    label: "Options",
+    icon: PrimeIcons.COG,
+  },
+  {
+    label: "Sign Out",
+    icon: PrimeIcons.POWER_OFF,
   },
 ];
 
@@ -69,7 +75,9 @@ const search = ref("");
         class="px-4 py-3 h-full w-full bg-transparent placeholder:font-light placeholder:text-base placeholder:text-slate-400"
         placeholder="Quick search..." />
     </div>
-    <div class="flex items-center shrink-0 space-x-4">
+    <div
+      class="h-full flex items-center shrink-0 space-x-4 cursor-pointer"
+      @click="toggleMenu">
       <Avatar
         class="avatar-contain h-12 w-12"
         image="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&w=128"
@@ -82,10 +90,8 @@ const search = ref("");
           {{ user.profileViews }} views today
         </span>
       </div>
-      <button type="button" @click="toggleMenu">
-        <i :class="PrimeIcons.CHEVRON_DOWN"></i>
-      </button>
-      <Menu ref="refMenu" :model="accountMenu" :popup="true" />
+      <i :class="PrimeIcons.CHEVRON_DOWN"></i>
+      <Menu ref="menuRef" :model="accountMenu" :popup="true" />
     </div>
   </header>
 </template>
