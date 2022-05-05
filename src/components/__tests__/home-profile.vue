@@ -40,6 +40,15 @@ const user = {
           </div>
         </div>
       </div>
+      <div class="p-8 bg-white space-y-4">
+        <span class="text-xl font-semibold block">About</span>
+        <p class="text-lg text-slate-700">
+          I'm more experienced in e-commerce web projects and mobile banking
+          apps, but also like to work with creative projects, such as landing
+          pages or unusual corporate websites.
+        </p>
+        <span class="uppercase font-bold text-slate-600 block">See more</span>
+      </div>
     </div>
   </div>
 </template>
