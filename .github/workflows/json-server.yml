@@ -6,6 +6,9 @@ on:
       - main
     paths:
       - server/*
+  pull_request:
+    branches:
+      - main
 
 jobs:
   publish:
@@ -17,7 +20,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: server/
+          source-directory: ${{ github.workspace }}/server/
           destination-github-username: 'Future-Leaders-SI653'
           destination-repository-name: 'waw-fake-api'
           user-name: github-actions
