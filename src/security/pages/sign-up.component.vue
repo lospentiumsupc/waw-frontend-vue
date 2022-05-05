@@ -43,7 +43,7 @@ const checked1 = ref(false);
       <div class="py-2 w-full">
         <button
           type="submit"
-          class="bg-slate-500 border-0 fs-bold hover:bg-slate-700 text-white fs-semibold rounded-2xl w-full h-12">
+          class="w-full py-2 px-3 rounded-xl transition-colors text-white bg-slate-500 hover:bg-slate-700 font-semibold">
           Sign Up
         </button>
       </div>
