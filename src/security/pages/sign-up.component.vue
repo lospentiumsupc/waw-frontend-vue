@@ -59,7 +59,7 @@ const phone = ref("");
           class="rounded-xl w-full" />
         <label for="phone">Phone Number</label>
       </span>
-      <div class="py-4">
+      <div class="my-4">
         <ToggleButton
           v-model="checked"
           on-label="I agree with terms and conditions"
@@ -67,14 +67,14 @@ const phone = ref("");
           :on-icon="PrimeIcons.CHECK"
           :off-icon="PrimeIcons.TIMES" />
       </div>
-      <div class="py-2 w-full">
+      <div class="my-2 w-full">
         <button
           type="submit"
           class="w-full py-2 px-3 rounded-xl transition-colors text-white bg-slate-500 hover:bg-slate-700 font-semibold">
           Sign Up
         </button>
       </div>
-      <div class="py-2">
+      <div class="my-2">
         <span>Already on WAW? </span>
         <span class="font-semibold cursor-pointer">Sign in</span>
       </div>
