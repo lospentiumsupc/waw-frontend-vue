@@ -49,7 +49,7 @@ const checked1 = ref(false);
       </div>
       <div class="py-2">
         <span>Already on WAW?</span>
-        <span type="button" class="font-semibold">Sign in</span>
+        <span class="font-semibold cursor-pointer">Sign in</span>
       </div>
     </div>
   </div>
