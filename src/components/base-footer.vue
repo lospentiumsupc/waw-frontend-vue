@@ -34,12 +34,14 @@ const selectedLang = ref(languages[0]);
 </script>
 
 <template>
-  <footer class="p-8 flex justify-between bg-slate-50">
-    <div class="space-y-4 flex flex-col">
-      <span class="mb-4 text-2xl font-bold">WAW</span>
+  <footer
+    class="px-4 py-8 md:p-8 flex flex-col md:flex-row md:justify-between bg-slate-50">
+    <div class="space-y-2 flex flex-col order-last md:order-none">
+      <span class="text-2xl font-bold">WAW</span>
       <span class="text-sm font-light">© Future Leaders Inc., 2022</span>
     </div>
-    <nav class="space-x-24 flex text-xs text-slate-800">
+    <nav
+      class="space-y-12 md:space-y-0 md:space-x-8 lg:space-x-24 flex flex-col md:flex-row mb-24 md:mb-0 text-xs text-slate-800">
       <div
         v-for="group in navigation"
         :key="group.label"
@@ -50,7 +52,7 @@ const selectedLang = ref(languages[0]);
         }}</span>
       </div>
     </nav>
-    <div class="flex flex-col">
+    <div class="flex flex-col mb-24 md:mb-0">
       <span class="mb-4 text-sm font-light">Language</span>
       <Dropdown
         v-model="selectedLang"

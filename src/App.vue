@@ -5,6 +5,6 @@ import BaseFooter from "./components/base-footer.vue";
 
 <template>
   <BaseHeader />
-  <div class="px-8 py-4">Hello, world!</div>
+  <div class="px-4 sm:px-8 py-4">Hello, world!</div>
   <BaseFooter />
 </template>
