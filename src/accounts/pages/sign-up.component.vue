@@ -4,6 +4,8 @@ import InputText from "primevue/inputtext";
 import ToggleButton from "primevue/togglebutton";
 import { PrimeIcons } from "primevue/api";
 import { ref } from "vue";
+import { AuthenticationService } from "../services/authentication.service";
+import { useRouter, RouterLink } from "vue-router";
 
 const checked = ref(false);
 const fullname = ref("");
@@ -11,6 +13,14 @@ const username = ref("");
 const email = ref("");
 const password = ref("");
 const phone = ref("");
+
+const auth = ref(AuthenticationService.instance);
+const router = useRouter();
+
+const handleRegister = () => {
+  auth.value.login();
+  router.push("/");
+};
 </script>
 
 <template>
@@ -70,13 +80,16 @@ const phone = ref("");
       <div class="my-2 w-full">
         <button
           type="submit"
-          class="w-full py-2 px-3 rounded-xl transition-colors text-white bg-slate-500 hover:bg-slate-700 font-semibold">
+          class="w-full py-2 px-3 rounded-xl transition-colors text-white bg-slate-500 hover:bg-slate-700 font-semibold"
+          @click="handleRegister">
           Sign Up
         </button>
       </div>
       <div class="my-2">
         <span>Already on WAW? </span>
-        <span class="font-semibold cursor-pointer">Sign in</span>
+        <RouterLink to="/account/signin" class="font-semibold">
+          Sign In
+        </RouterLink>
       </div>
     </div>
   </div>

@@ -7,7 +7,9 @@ import Column from "primevue/column";
 import Tag from "primevue/tag";
 import Dropdown from "primevue/dropdown";
 import TextArea from "primevue/textarea";
+import Dialog from "primevue/dialog";
 </script>
+
 <template>
   <div>
     <div class="job-offers-admin">
@@ -255,7 +257,7 @@ import TextArea from "primevue/textarea";
 </template>
 
 <script>
-import { JobOffersApiService } from "../services/job-offers-api.service";
+import { JobOffersService } from "../services/job-offers.service";
 import { FilterMatchMode } from "primevue/api";
 
 export default {
@@ -278,12 +280,11 @@ export default {
     };
   },
   created() {
-    this.jobOffersService = new JobOffersApiService();
+    this.jobOffersService = new JobOffersService();
     this.jobOffersService.getAll().then(response => {
       this.jobOffers = response.data;
       // eslint-disable-next-line array-callback-return
       this.jobOffers.forEach(jobOffer => this.getDisplayableJobOffer(jobOffer));
-      console.log(this.jobOffers);
     });
     this.initFilters();
   },

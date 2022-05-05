@@ -1,13 +1,24 @@
 <script setup>
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
+import { AuthenticationService } from "@/accounts/services/authentication.service";
+import { onBeforeMount, ref, watchEffect } from "vue";
+import { useRouter } from "vue-router";
 
-const user = {
-  fullName: "John Doe",
-  location: "Lima, Peru",
-  description:
-    "Freelance UX/UI designer, 80+ projects in Web, Mobile (Android & iOS) and creative projects. Open to offers.",
-};
+const auth = ref(AuthenticationService.instance);
+const user = ref(auth.value.getCurrentUser());
+
+const router = useRouter();
+
+onBeforeMount(() => {
+  if (!auth.value.loggedIn) {
+    router.push("/account/signin");
+  }
+});
+
+watchEffect(() => {
+  user.value = auth.value.getCurrentUser();
+});
 </script>
 <template>
   <div class="p-16 flex space-x-8 max-w-screen-2xl">
@@ -35,18 +46,14 @@ const user = {
               </div>
             </div>
             <p class="w-full text-slate-700">
-              {{ user.description }}
+              {{ user.biography }}
             </p>
           </div>
         </div>
       </div>
       <div class="p-8 bg-white space-y-4">
         <span class="text-xl font-semibold block">About</span>
-        <p class="text-lg text-slate-700">
-          I'm more experienced in e-commerce web projects and mobile banking
-          apps, but also like to work with creative projects, such as landing
-          pages or unusual corporate websites.
-        </p>
+        <p class="text-lg text-slate-700">{{ user.about }}</p>
         <span class="uppercase font-bold text-slate-600 block">See more</span>
       </div>
       <section class="lg:pt-32 lg:pb-20 bg-white">
