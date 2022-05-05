@@ -1,6 +1,7 @@
 <script setup>
 import InputText from "primevue/inputtext";
 import ToggleButton from "primevue/togglebutton";
+import { PrimeIcons } from "primevue/api";
 import { ref } from "vue";
 
 const checked1 = ref(false);
@@ -37,8 +38,8 @@ const checked1 = ref(false);
           v-model="checked1"
           on-label="I agree with terms and conditions"
           off-label="I disagree with terms and conditions"
-          on-icon="pi pi-check"
-          off-icon="pi pi-times" />
+          :on-icon="PrimeIcons.CHECK"
+          :off-icon="PrimeIcons.TIMES" />
       </div>
       <div class="py-2 w-full">
         <button
