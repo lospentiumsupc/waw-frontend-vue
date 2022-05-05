@@ -13,12 +13,12 @@ const checked1 = ref(false);
         <span class="text-2xl font-semibold">Create an account</span>
       </div>
       <span class="p-float-label w-full">
-        <InputText id="firstname" type="text" class="rounded-xl w-full" />
-        <label for="firstname">First name</label>
+        <InputText id="fullname" type="text" class="rounded-xl w-full" />
+        <label for="fullname">Full name</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText id="lastname" type="text" class="rounded-xl w-full" />
-        <label for="lastname">Last name</label>
+        <InputText id="username" type="text" class="rounded-xl w-full" />
+        <label for="username">How should we call you?</label>
       </span>
       <span class="p-float-label w-full">
         <InputText id="email" type="email" class="rounded-xl w-full" />
@@ -48,7 +48,7 @@ const checked1 = ref(false);
         </button>
       </div>
       <div class="py-2">
-        <span>Already on WAW?</span>
+        <span>Already on WAW? </span>
         <span class="font-semibold cursor-pointer">Sign in</span>
       </div>
     </div>
