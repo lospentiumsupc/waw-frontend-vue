@@ -1,0 +1,26 @@
+name: json-server
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - server/*
+
+jobs:
+  publish:
+    name: 'publish to waw-fake-api repository'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Push directory to another repository
+        uses: cpina/github-action-push-to-another-repository@v1.4.2
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+        with:
+          source-directory: server/
+          destination-github-username: 'Future-Leaders-SI653'
+          destination-repository-name: 'waw-fake-api'
+          user-name: github-actions
+          user-email: github-actions@github.com
+          target-branch: main
