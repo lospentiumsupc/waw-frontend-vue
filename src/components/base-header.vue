@@ -84,7 +84,7 @@ watchEffect(updateMenu);
       class="flex items-center shrink-0 space-x-4 cursor-pointer"
       @click="toggleMenu">
       <Avatar
-        class="avatar-contain h-8 w-8 sm:h-12 sm:w-12"
+        class="avatar-contain"
         image="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&w=128"
         shape="circle" />
       <div class="hidden lg:flex flex-col space-y-1">
