@@ -4,7 +4,12 @@ import ToggleButton from "primevue/togglebutton";
 import { PrimeIcons } from "primevue/api";
 import { ref } from "vue";
 
-const checked1 = ref(false);
+const checked = ref(false);
+const fullname = ref("");
+const username = ref("");
+const email = ref("");
+const password = ref("");
+const phone = ref("");
 </script>
 
 <template>
@@ -14,28 +19,48 @@ const checked1 = ref(false);
         <span class="text-2xl font-semibold">Create an account</span>
       </div>
       <span class="p-float-label w-full">
-        <InputText id="fullname" type="text" class="rounded-xl w-full" />
+        <InputText
+          id="fullname"
+          v-model="fullname"
+          type="text"
+          class="rounded-xl w-full" />
         <label for="fullname">Full name</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText id="username" type="text" class="rounded-xl w-full" />
+        <InputText
+          id="username"
+          v-model="username"
+          type="text"
+          class="rounded-xl w-full" />
         <label for="username">How should we call you?</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText id="email" type="email" class="rounded-xl w-full" />
+        <InputText
+          id="email"
+          v-model="email"
+          type="email"
+          class="rounded-xl w-full" />
         <label for="email">Email</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText id="password" type="password" class="rounded-xl w-full" />
+        <InputText
+          id="password"
+          v-model="password"
+          type="password"
+          class="rounded-xl w-full" />
         <label for="password">Password</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText id="phone" type="tel" class="rounded-xl w-full" />
+        <InputText
+          id="phone"
+          v-model="phone"
+          type="tel"
+          class="rounded-xl w-full" />
         <label for="phone">Phone</label>
       </span>
       <div class="py-4">
         <ToggleButton
-          v-model="checked1"
+          v-model="checked"
           on-label="I agree with terms and conditions"
           off-label="I disagree with terms and conditions"
           :on-icon="PrimeIcons.CHECK"
