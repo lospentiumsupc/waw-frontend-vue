@@ -1,9 +1,19 @@
 <script setup>
 import InputText from "primevue/inputtext";
-
 import { ref } from "vue";
+import { useRouter, RouterLink } from "vue-router";
+import { AuthenticationService } from "../services/authentication.service";
+
 const email = ref("");
 const password = ref("");
+
+const router = useRouter();
+const auth = ref(AuthenticationService.instance);
+
+const handleLogin = () => {
+  auth.value.login();
+  router.push("/");
+};
 </script>
 
 <template>
@@ -36,13 +46,16 @@ const password = ref("");
       <div class="my-2 w-full">
         <button
           type="submit"
-          class="w-full py-2 px-3 rounded-xl transition-colors text-white bg-slate-500 hover:bg-slate-700 font-semibold">
+          class="w-full py-2 px-3 rounded-xl transition-colors text-white bg-slate-500 hover:bg-slate-700 font-semibold"
+          @click="handleLogin">
           Sign In
         </button>
       </div>
       <div class="my-2">
         <span>New to WAW? </span>
-        <span class="font-semibold cursor-pointer">Join for free now</span>
+        <RouterLink to="/account/signup" class="font-semibold">
+          Join for free now
+        </RouterLink>
       </div>
     </div>
   </div>

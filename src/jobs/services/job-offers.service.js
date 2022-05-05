@@ -1,6 +1,6 @@
-import { http } from "../../core/services/http-common";
+import { http } from "@/core/services/http-common";
 
-export class JobOffersApiService {
+export class JobOffersService {
   getAll() {
     return http.get("/jobOffers");
   }
