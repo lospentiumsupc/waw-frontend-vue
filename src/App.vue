@@ -1,5 +1,10 @@
-<script setup></script>
+<script setup>
+import BaseHeader from "./components/base-header.vue";
+import BaseFooter from "./components/base-footer.vue";
+</script>
 
 <template>
-  <div class="text-lg">Hello, world!</div>
+  <BaseHeader />
+  <div class="px-4 sm:px-8 py-4">Hello, world!</div>
+  <BaseFooter />
 </template>
