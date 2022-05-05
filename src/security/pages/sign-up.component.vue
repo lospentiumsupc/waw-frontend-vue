@@ -1,4 +1,5 @@
 <script setup>
+import InputMask from "primevue/inputmask";
 import InputText from "primevue/inputtext";
 import ToggleButton from "primevue/togglebutton";
 import { PrimeIcons } from "primevue/api";
@@ -24,7 +25,7 @@ const phone = ref("");
           v-model="fullname"
           type="text"
           class="rounded-xl w-full" />
-        <label for="fullname">Full name</label>
+        <label for="fullname">Full Name</label>
       </span>
       <span class="p-float-label w-full">
         <InputText
@@ -51,12 +52,12 @@ const phone = ref("");
         <label for="password">Password</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText
+        <InputMask
           id="phone"
           v-model="phone"
-          type="tel"
+          mask="999 999 999"
           class="rounded-xl w-full" />
-        <label for="phone">Phone</label>
+        <label for="phone">Phone Number</label>
       </span>
       <div class="py-4">
         <ToggleButton
