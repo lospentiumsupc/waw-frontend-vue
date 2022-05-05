@@ -22,7 +22,7 @@
       class="bg-slate-400 rounded-lg h-12 placeholder:font-light placeholder:text-white my-4"
       placeholder="Phone" />
     <input
-      type="password"
+      type="text"
       class="bg-slate-400 rounded-lg h-12 placeholder:font-light placeholder:text-white my-4"
       placeholder="Rol" />
 
