@@ -8,31 +8,28 @@ const checked1 = ref(false);
 
 <template>
   <div class="flex justify-center items-center">
-    <div class="flex flex-col container max-w-md items-center mt-8">
-      <div class="py-6">
+    <div class="flex flex-col container max-w-md items-center mt-8 space-y-4">
+      <div class="mb-6">
         <span class="text-2xl font-semibold">Create an account</span>
       </div>
       <span class="p-float-label w-full">
-        <InputText id="firstname" type="text" class="rounded-xl my-4 w-full" />
+        <InputText id="firstname" type="text" class="rounded-xl w-full" />
         <label for="firstname">First name</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText id="lastname" type="text" class="rounded-xl my-4 w-full" />
+        <InputText id="lastname" type="text" class="rounded-xl w-full" />
         <label for="lastname">Last name</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText id="email" type="email" class="rounded-xl my-4 w-full" />
+        <InputText id="email" type="email" class="rounded-xl w-full" />
         <label for="email">Email</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText
-          id="password"
-          type="password"
-          class="rounded-xl my-4 w-full" />
+        <InputText id="password" type="password" class="rounded-xl w-full" />
         <label for="password">Password</label>
       </span>
       <span class="p-float-label w-full">
-        <InputText id="phone" type="tel" class="rounded-xl my-4 w-full" />
+        <InputText id="phone" type="tel" class="rounded-xl w-full" />
         <label for="phone">Phone</label>
       </span>
       <div class="py-4">
