@@ -34,7 +34,7 @@ const selectedLang = ref(languages[0]);
 </script>
 
 <template>
-  <footer class="py-8 px-16 flex justify-between bg-slate-50">
+  <footer class="p-8 flex justify-between bg-slate-50">
     <div class="space-y-4 flex flex-col">
       <span class="mb-4 text-2xl font-bold">WAW</span>
       <span class="text-sm font-light">© Future Leaders Inc., 2022</span>
