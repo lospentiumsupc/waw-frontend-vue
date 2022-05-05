@@ -6,9 +6,6 @@ on:
       - main
     paths:
       - server/*
-  pull_request:
-    branches:
-      - main
 
 jobs:
   publish:
