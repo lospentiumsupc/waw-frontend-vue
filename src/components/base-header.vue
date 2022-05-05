@@ -45,11 +45,10 @@ const search = ref("");
 </script>
 
 <template>
-  <header class="px-8 flex items-center h-20 space-x-8">
+  <header class="px-8 flex items-center h-20 space-x-8 bg-white">
     <div class="flex items-center h-full space-x-8">
       <h1 class="text-2xl font-bold">WAW</h1>
-      <span class="h-full w-0 border-l border-slate-200"></span>
-      <nav>
+      <nav class="h-full pl-8 flex items-center border-l border-slate-200">
         <ul class="flex text-center space-x-12">
           <li
             v-for="item in navigation"
