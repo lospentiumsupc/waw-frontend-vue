@@ -257,7 +257,7 @@ import Dialog from "primevue/dialog";
 </template>
 
 <script>
-import { JobOffersService } from "../services/job-offers.service";
+import { JobsService } from "../services/jobs.service";
 import { FilterMatchMode } from "primevue/api";
 
 export default {
@@ -280,7 +280,7 @@ export default {
     };
   },
   created() {
-    this.jobOffersService = new JobOffersService();
+    this.jobOffersService = new JobsService();
     this.jobOffersService.getAll().then(response => {
       this.jobOffers = response.data;
       // eslint-disable-next-line array-callback-return
