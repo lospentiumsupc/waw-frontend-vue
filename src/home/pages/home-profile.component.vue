@@ -56,76 +56,77 @@ watchEffect(() => {
         <p class="text-lg text-slate-700">{{ user.about }}</p>
         <span class="uppercase font-bold text-slate-600 block">See more</span>
       </div>
-      <section class="lg:pt-32 lg:pb-20 bg-white">
-        <div class="container">
-          <div class="flex flex-col p-8 w-full space-y-3">
-            <span class="text-xl font-semibold block">Projects</span>
-            <span class="text-xl text-slate-500 block"> 3 of 12</span>
+      <div class="p-8 rounded bg-white space-y-4">
+        <div class="flex">
+          <span class="text-xl font-semibold block mr-2">Projects</span>
+          <span class="text-xl text-slate-500 block"> 3 of 12</span>
+        </div>
+        <div class="flex space-x-4">
+          <div class="w-full md:w-1/2 xl:w-1/3 px-4">
+            <div class="bg-white rounded-lg overflow-hidden mb-10">
+              <img
+                src="https://unsplash.com/photos/T6fDN60bMWY/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8dXglMkZ1aSUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NTA5MDc&w=640"
+                alt="work's image"
+                class="w-full" />
+              <div class="py-2 sm:p-9 md:p-7 xl:p-9">
+                <h3>
+                  <a
+                    href="project"
+                    class="mt-6 text-base font-medium text-slate-600">
+                    Zara redisign concept
+                  </a>
+                </h3>
+                <p class="text-sm font-light mb-7">
+                  UX/UI Design - July 5, 2019
+                </p>
+              </div>
+            </div>
           </div>
-          <div class="flex flex-wrap -mx-4">
-            <div class="w-full md:w-1/2 xl:w-1/3 px-4">
-              <div class="bg-white rounded-lg overflow-hidden mb-10">
-                <img
-                  src="https://unsplash.com/photos/T6fDN60bMWY/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8dXglMkZ1aSUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NTA5MDc&w=640"
-                  alt="work's image"
-                  class="w-full" />
-                <div class="py-2 sm:p-9 md:p-7 xl:p-9">
-                  <h3>
-                    <a
-                      href="project"
-                      class="mt-6 text-base font-medium text-slate-600">
-                      Zara redisign concept
-                    </a>
-                  </h3>
-                  <p class="text-sm font-light mb-7">
-                    UX/UI Design - July 5, 2019
-                  </p>
-                </div>
+          <div class="w-full md:w-1/2 xl:w-1/3 px-4">
+            <div class="bg-white rounded-lg overflow-hidden mb-10">
+              <img
+                src="https://unsplash.com/photos/v9vII5gV8Lw/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
+                alt="work's image"
+                class="w-full" />
+              <div class="p-8 sm:p-9 md:p-7 xl:p-9">
+                <h3>
+                  <a
+                    href="project"
+                    class="mt-6 text-base font-medium text-slate-600">
+                    SCTHON Event Brand Identity
+                  </a>
+                </h3>
+                <p class="text-sm font-light mb-7">
+                  Graphic Design - March 31, 2019
+                </p>
               </div>
             </div>
-            <div class="w-full md:w-1/2 xl:w-1/3 px-4">
-              <div class="bg-white rounded-lg overflow-hidden mb-10">
-                <img
-                  src="https://unsplash.com/photos/v9vII5gV8Lw/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
-                  alt="work's image"
-                  class="w-full" />
-                <div class="p-8 sm:p-9 md:p-7 xl:p-9">
-                  <h3>
-                    <a
-                      href="project"
-                      class="mt-6 text-base font-medium text-slate-600">
-                      SCTHON Event Brand Identity
-                    </a>
-                  </h3>
-                  <p class="text-sm font-light mb-7">
-                    Graphic Design - March 31, 2019
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 xl:w-1/3 px-4">
-              <div class="bg-white rounded-lg overflow-hidden mb-10">
-                <img
-                  src="https://unsplash.com/photos/CGpifH3FjOA/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
-                  alt="work's image"
-                  class="w-full" />
-                <div class="p-8 sm:p-9 md:p-7 xl:p-9">
-                  <h3>
-                    <a
-                      href="project"
-                      class="mt-6 text-base font-medium text-slate-600">
-                      Dzord Brand Identity
-                    </a>
-                  </h3>
-                  <p class="text-sm font-light mb-7">
-                    Graphic Design - April 4, 2016
-                  </p>
-                </div>
+          </div>
+          <div class="w-full md:w-1/2 xl:w-1/3 px-4">
+            <div class="bg-white rounded-lg overflow-hidden mb-10">
+              <img
+                src="https://unsplash.com/photos/CGpifH3FjOA/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
+                alt="work's image"
+                class="w-full" />
+              <div class="p-8 sm:p-9 md:p-7 xl:p-9">
+                <h3>
+                  <a
+                    href="project"
+                    class="mt-6 text-base font-medium text-slate-600">
+                    Dzord Brand Identity
+                  </a>
+                </h3>
+                <p class="text-sm font-light mb-7">
+                  Graphic Design - April 4, 2016
+                </p>
               </div>
             </div>
           </div>
         </div>
-      </section>
+        <span class="uppercase font-bold text-slate-600 block">
+          Show all (12)
+        </span>
+      </div>
     </div>
   </div>
 </template>
