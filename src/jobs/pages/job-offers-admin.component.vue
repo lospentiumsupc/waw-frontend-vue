@@ -92,7 +92,7 @@ import Dialog from "primevue/dialog";
           <template #body="slotProps">
             <img
               :src="slotProps.data.image"
-              alt="slotProps.data.image"
+              :alt="slotProps.data.image"
               class="shadow-2"
               width="100" />
           </template>
@@ -295,9 +295,9 @@ export default {
         { label: "Published", value: "published" },
         { label: "Unpublished", value: "unpublished" },
       ],
-      jobOffersService: null,
     };
   },
+  jobOffersService: null,
   created() {
     this.jobOffersService = new JobsService();
     this.jobOffersService.getAll().then(response => {
