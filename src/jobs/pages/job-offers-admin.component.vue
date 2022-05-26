@@ -7,7 +7,7 @@ import Column from "primevue/column";
 import Tag from "primevue/tag";
 import Dropdown from "primevue/dropdown";
 import TextArea from "primevue/textarea";
-import Dialog from "primevue/dialog";
+import Dialog from "primevue/";
 </script>
 
 <template>
@@ -362,6 +362,8 @@ export default {
         } else {
           this.jobOffer.id = 0;
           this.jobOffer = this.getStorableJobOffer(this.jobOffer);
+          this.jobOffer.image =
+            "https://unsplash.com/photos/T6fDN60bMWY/download?w=640";
           this.jobOffersService.create(this.jobOffer).then(response => {
             this.jobOffer = this.getDisplayableJobOffer(response.data);
             this.jobOffers.push(this.jobOffer);
@@ -416,6 +418,13 @@ export default {
         });
       });
       this.deleteJobOffersDialog = false;
+      this.selectedJobOffers = null;
+      this.$toast.add({
+        severity: "success",
+        summary: "Successful",
+        detail: "Job Offers Deleted",
+        life: 3000,
+      });
     },
   },
 };
