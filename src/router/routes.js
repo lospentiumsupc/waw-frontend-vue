@@ -15,6 +15,11 @@ export const routes = [
     component: () => import("@/accounts/pages/sign-in.component.vue"),
   },
   {
+    path: "/account/resetpassword",
+    name: "Reset Password",
+    component: () => import("@/accounts/pages/reset-password.component.vue"),
+  },
+  {
     path: "/account/signup",
     name: "Sign Up",
     component: () => import("@/accounts/pages/sign-up.component.vue"),
