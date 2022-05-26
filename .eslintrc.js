@@ -9,11 +9,13 @@ module.exports = {
     es2021: true,
     "vue/setup-compiler-macros": true,
   },
+  parserOptions: {
+    ecmaVersion: "2022",
+  },
   rules: {
     eqeqeq: ["error"],
     camelcase: ["error"],
     yoda: ["error", "never", { exceptRange: true }],
-    curly: ["error", "multi", "consistent"],
     "no-var": ["error"],
     "no-use-before-define": ["error"],
     "prefer-const": ["error"],
