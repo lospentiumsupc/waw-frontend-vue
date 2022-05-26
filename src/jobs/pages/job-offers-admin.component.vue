@@ -76,6 +76,16 @@ import Dialog from "primevue/dialog";
           :sortable="true"
           :style="{ minWidth: `12rem` }"
           class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200"></Column>
+        <Column header="Image" header-style="width:14%; min-width:10rem;">
+          <template #body="slotProps">
+            <span class="p-column-title">Image</span>
+            <img
+              :src="`images/product/${slotProps.data.image}`"
+              :alt="slotProps.data.image"
+              class="shadow-2"
+              width="100" />
+          </template>
+        </Column>
         <Column
           field="title"
           header="Title"
@@ -304,6 +314,7 @@ export default {
       return {
         id: displayableJobOffer.id,
         title: displayableJobOffer.title,
+        image: displayableJobOffer.image,
         description: displayableJobOffer.description,
         salaryRange: displayableJobOffer.salaryRange,
         published: displayableJobOffer.status.label === "Published",
