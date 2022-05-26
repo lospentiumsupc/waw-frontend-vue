@@ -35,9 +35,10 @@ onMounted(async () => {
       </div>
     </template>
     <Column field="id" header="ID" :sortable="true"></Column>
-    <Column field="title" header="" :sortable="true"></Column>
-    <Column field="description" header="" :sortable="true"></Column>
-    <Column>
+    <Column field="title" header="Title" :sortable="true"></Column>
+    <Column field="description" header="Description" :sortable="true"></Column>
+    <Column field="salaryRange" header="Salary Range" :sortable="true"></Column>
+    <Column header="Action">
       <Button label="Apply"></Button>
     </Column>
   </DataTable>
