@@ -39,8 +39,8 @@ const handleLogin = () => {
         <label for="password">Password</label>
       </span>
       <div>
-        <span class="font-semibold cursor-pointer text-slate-700"
-          >Forgot password?</span
+        <RouterLink to="/account/resetpassword" class="font-semibold">
+          Forgot password?</RouterLink
         >
       </div>
       <div class="my-2 w-full">
