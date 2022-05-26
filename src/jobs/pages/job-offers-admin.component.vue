@@ -52,11 +52,11 @@ import Dialog from "primevue/dialog";
         responsive-layout="scroll">
         <template #header>
           <div
-            class="table-header flex flex-column md:flex-row md:justify-content-between">
+            class="flex flex-column md:flex-row md:justify-between md:align-items-center">
             <h5 class="mb-2 md:m-0 p-as-md-center text-xl">
               Job offers administrator
             </h5>
-            <span class="p-input-icon-left"
+            <span class="block mt-2 md:mt-0 p-input-icon-left"
               ><i class="pi pi-search" />
               <InputText
                 v-model="filters['global'].value"
@@ -74,29 +74,34 @@ import Dialog from "primevue/dialog";
           field="id"
           header="Id"
           :sortable="true"
-          :style="{ minWidth: `12rem` }"></Column>
+          :style="{ minWidth: `12rem` }"
+          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200"></Column>
         <Column
           field="title"
           header="Title"
           :sortable="true"
-          :style="{ minWidth: `16rem` }">
+          :style="{ minWidth: `16rem` }"
+          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200">
         </Column>
         <Column
           field="description"
           header="Description"
           :sortable="true"
-          :style="{ minWidth: `16rem` }"></Column>
+          :style="{ minWidth: `16rem` }"
+          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200"></Column>
         <Column
           field="salaryRange"
           header="Salary Range"
           :sortable="true"
-          :style="{ minWidth: `16rem` }">
+          :style="{ minWidth: `16rem` }"
+          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200">
         </Column>
         <Column
           field="status"
           header="Status"
           :sortable="true"
-          :style="{ minWidth: `12rem` }">
+          :style="{ minWidth: `12rem` }"
+          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200">
           <template #body="slotProps">
             <Tag
               v-if="slotProps.data.status === 'Published'"
