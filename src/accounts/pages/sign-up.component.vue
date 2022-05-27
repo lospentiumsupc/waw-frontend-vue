@@ -1,73 +1,69 @@
 <script setup>
-import InputMask from "primevue/inputmask";
 import InputText from "primevue/inputtext";
 import ToggleButton from "primevue/togglebutton";
 import { PrimeIcons } from "primevue/api";
 import { ref } from "vue";
-import { AuthenticationService } from "../services/authentication.service";
+import { GlobalAuthService } from "../services/auth.service";
 import { useRouter, RouterLink } from "vue-router";
 
-const checked = ref(false);
-const fullname = ref("");
-const username = ref("");
-const email = ref("");
-const password = ref("");
-const phone = ref("");
-
-const auth = ref(AuthenticationService.instance);
+const auth = GlobalAuthService;
 const router = useRouter();
 
-const handleRegister = () => {
-  auth.value.login();
-  router.push("/");
+const user = ref({
+  fullName: "",
+  preferredName: "",
+  email: "",
+  password: "",
+});
+const checked = ref(false);
+
+const handleRegister = async () => {
+  const success = await auth.register(user.value);
+  if (success) router.push("/");
 };
 </script>
 
 <template>
   <div class="flex justify-center items-center">
-    <div class="flex flex-col container max-w-md items-center mt-8 space-y-4">
+    <form
+      class="flex flex-col container max-w-md items-center mt-8 space-y-4"
+      @submit.prevent="handleRegister">
       <div class="mb-6">
         <span class="text-2xl font-semibold">Create an account</span>
       </div>
       <span class="p-float-label w-full">
         <InputText
-          id="fullname"
-          v-model="fullname"
+          id="signup_fullname"
+          v-model="user.fullName"
           type="text"
-          class="rounded-xl w-full" />
-        <label for="fullname">Full Name</label>
+          class="rounded w-full !bg-transparent" />
+        <label for="signup_fullname" class="!bg-slate-100">Full Name</label>
       </span>
       <span class="p-float-label w-full">
         <InputText
-          id="username"
-          v-model="username"
+          id="signup_preferredName"
+          v-model="user.preferredName"
           type="text"
-          class="rounded-xl w-full" />
-        <label for="username">How should we call you?</label>
+          class="rounded w-full !bg-transparent" />
+        <label for="signup_preferredName" class="!bg-slate-100">
+          How should we call you?
+        </label>
       </span>
       <span class="p-float-label w-full">
         <InputText
-          id="email"
-          v-model="email"
+          id="signup_email"
+          v-model="user.email"
           type="email"
-          class="rounded-xl w-full" />
-        <label for="email">Email</label>
+          class="rounded w-full !bg-transparent" />
+        <label for="signup_email" class="!bg-slate-100">Email</label>
       </span>
       <span class="p-float-label w-full">
         <InputText
-          id="password"
-          v-model="password"
+          id="signup_password"
+          v-model="user.password"
           type="password"
-          class="rounded-xl w-full" />
-        <label for="password">Password</label>
-      </span>
-      <span class="p-float-label w-full">
-        <InputMask
-          id="phone"
-          v-model="phone"
-          mask="999 999 999"
-          class="rounded-xl w-full" />
-        <label for="phone">Phone Number</label>
+          class="rounded w-full !bg-transparent" />
+        <label for="signup_password" class="!bg-slate-100">Password</label>
       </span>
       <div class="my-4">
         <ToggleButton
@@ -80,8 +76,7 @@ const handleRegister = () => {
       <div class="my-2 w-full">
         <button
           type="submit"
-          class="w-full py-2 px-3 rounded-xl transition-colors text-white bg-slate-500 hover:bg-slate-700 font-semibold"
-          @click="handleRegister">
+          class="w-full py-2 px-3 rounded transition-colors text-white bg-slate-500 hover:bg-slate-700 font-semibold">
           Sign Up
         </button>
       </div>
@@ -91,6 +86,6 @@ const handleRegister = () => {
           Sign In
         </RouterLink>
       </div>
-    </div>
+    </form>
   </div>
 </template>

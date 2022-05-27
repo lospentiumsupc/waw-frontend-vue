@@ -4,9 +4,42 @@ import Column from "primevue/column";
 import Button from "primevue/button";
 import { JobsService } from "../services/jobs.service";
 import { ref, onMounted } from "vue";
+import { PrimeIcons } from "primevue/api";
+import ConfirmDialog from "primevue/confirmdialog";
+import Toast from "primevue/toast";
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 
 const service = new JobsService();
 const jobs = ref([]);
+
+const confirm = useConfirm();
+const toast = useToast();
+
+const handleConfirmation = () => {
+  confirm.require({
+    header: "Confirmation",
+    message: "Are you sure you want to apply for this job?",
+    icon: PrimeIcons.EXCLAMATION_TRIANGLE,
+    accept: () => {
+      toast.add({
+        severity: "success",
+        summary: "Confirmed",
+        detail: "You have succesfully applied for the job",
+        life: 3000,
+      });
+    },
+    reject: () => {
+      toast.add({
+        severity: "error",
+        summary: "Cancelled",
+        detail: "You have cancelled the application for the job",
+        life: 3000,
+      });
+      close();
+    },
+  });
+};
 
 onMounted(async () => {
   const response = await service.getAll();
@@ -15,6 +48,8 @@ onMounted(async () => {
 </script>
 
 <template>
+  <Toast />
+  <ConfirmDialog />
   <DataTable
     :value="jobs"
     data-key="id"
@@ -37,7 +72,11 @@ onMounted(async () => {
     <Column field="salaryRange" header="Salary Range" :sortable="true" />
     <Column header="Action">
       <template #body>
-        <Button label="Apply" class="p-button-primary p-button-text"></Button>
+        <Button
+          label="Apply"
+          class="p-button-primary p-button-text"
+          @click="handleConfirmation()">
+        </Button>
       </template>
     </Column>
   </DataTable>

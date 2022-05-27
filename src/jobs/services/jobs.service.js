@@ -1,26 +1,17 @@
+import { BaseService } from "@/core/services/base.service";
 import { http } from "@/core/services/http-common";
 
-export class JobsService {
-  getAll() {
-    return http.get("/jobs");
-  }
-  getById(id) {
-    return http.get(`/jobs/${id}`);
+export class JobsService extends BaseService {
+  constructor() {
+    super("/jobs");
   }
 
-  create(data) {
-    return http.post("/jobs", data);
-  }
-
-  update(id, data) {
-    return http.put(`/jobs/${id}`, data);
-  }
-
-  delete(id) {
-    return http.delete(`/jobs/${id}`);
-  }
-
+  /**
+   * @param {string} title
+   */
   findByTitle(title) {
-    return http.get(`/jobs?title=${title}`);
+    return http.get(`${this.endpoint}?title=${title}`);
   }
 }
+
+export const GlobalJobsService = new JobsService();
