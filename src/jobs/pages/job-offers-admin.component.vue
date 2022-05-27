@@ -47,9 +47,10 @@ import { PrimeIcons } from "primevue/api";
         :paginator="true"
         :rows="10"
         :filters="filters"
-        filter-display="menu"
+        filter-display="row"
         :loading="loading"
         :row-hover="true"
+        :global-filter-fields="['title']"
         paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         :rows-per-page-options="[10, 15, 20]"
         current-page-report-template="Showing {first} to {last} of {totalRecords} jobOffers"
@@ -79,11 +80,16 @@ import { PrimeIcons } from "primevue/api";
           :sortable="true"
           class="px-6 py-3 text-xs w-48"></Column>
 
-        <Column
-          field="title"
-          header="Title"
-          :sortable="true"
-          class="px-6 py-3 text-xs w-48">
+        <Column field="title" header="Title" class="px-6 py-3 text-xs w-48">
+          <template #filter="{ filterModel, filterCallback }">
+            <InputText
+              v-model="filterModel.value"
+              v-tooltip.top.focus="'Hit enter key to filter'"
+              type="text"
+              class="p-column-filter"
+              :placeholder="`Search by title - `"
+              @keydown.enter="filterCallback()" />
+          </template>
         </Column>
         <Column
           header="Image"
@@ -280,11 +286,15 @@ import { PrimeIcons } from "primevue/api";
 
 <script>
 // eslint-disable-next-line no-duplicate-imports
-import { FilterMatchMode } from "primevue/api";
+import { FilterMatchMode, FilterOperator } from "primevue/api";
 import { JobsService } from "@/jobs/services/jobs.service";
+import Tooltip from "primevue/tooltip";
 
 export default {
   name: "JobOfferList",
+  directives: {
+    tooltip: Tooltip,
+  },
   data() {
     return {
       jobOffers: [],
@@ -293,7 +303,9 @@ export default {
       deleteJobOffersDialog: false,
       jobOffer: {},
       selectedJobOffers: null,
-      filters: {},
+      filters: {
+        title: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+      },
       loading: true,
       submitted: false,
       statuses: [
@@ -333,8 +345,15 @@ export default {
     initFilters() {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        title: {
+          operator: FilterOperator.AND,
+          constraints: [
+            { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+          ],
+        },
       };
     },
+
     findIndexById(id) {
       return this.jobOffer.findIndex(jobOffer => jobOffer.id === id);
     },
