@@ -1,18 +1,38 @@
 <script setup>
-import Button from "primevue/button";
+import InputText from "primevue/inputtext";
 </script>
+
 <template>
-  <div class="flex flex-col items-center w-100 space-y-4 0077B5">
-    <span class="text-2xl font-semibold"> Forgot password? </span>
-    <div class="flex flex-col w-1/2 space-y-4">
-      <input type="password" placeholder="johndoe123" class="h-12" />
-      <input type="password" placeholder="johndoe123" class="h-12" />
-    </div>
+  <div class="flex justify-center items-center">
+    <div class="flex flex-col container max-w-md items-center mt-8 space-y-4">
+      <div class="mb-6">
+        <span class="text-2xl font-semibold">Forgot Password?</span>
+      </div>
+      <span class="p-float-label w-full">
+        <InputText
+          id="email"
+          v-model="email"
+          type="email"
+          class="rounded-xl w-full" />
+        <label for="email">Email</label>
+      </span>
 
-    <Button label="Primary">Reset Password</Button>
-
-    <div>
-      <span class="">Confirm this action in the email we sent you </span>
+      <div class="my-2 w-full">
+        <button
+          type="submit"
+          class="w-full py-2 px-3 rounded-xl transition-colors text-white bg-slate-500 hover:bg-slate-700 font-semibold"
+          @click="handleLogin">
+          Send
+        </button>
+      </div>
+      <div class="my-2">
+        <span>follow the instructions that will be sent by mail </span>
+      </div>
+      <div>
+        <RouterLink to="/account/signin" class="font-semibold">
+          Back to login
+        </RouterLink>
+      </div>
     </div>
   </div>
 </template>
