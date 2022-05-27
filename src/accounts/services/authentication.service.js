@@ -1,40 +1,28 @@
-// We'll implement proper authentication later
-export class AuthenticationService {
-  /** @type {AuthenticationService} */
-  static _instance = null;
+import { BaseService } from "@/core/services/base.service";
+import { http } from "@/core/services/http-common";
 
-  static get instance() {
-    if (this._instance === null) {
-      this._instance = new AuthenticationService();
-    }
-    return this._instance;
+export class AuthenticationService extends BaseService {
+  user = null;
+
+  get loggedIn() {
+    return this.user !== null;
   }
 
-  loggedIn = false;
-
-  login() {
-    this.loggedIn = true;
+  /**
+   * @param {string} email
+   */
+  async login(email) {
+    const response = await http.get(`${this.endpoint}?email=${email}`);
+    this.user = response.data;
   }
 
   logout() {
-    this.loggedIn = false;
+    this.user = null;
   }
 
   getCurrentUser() {
-    if (this.loggedIn) {
-      return {
-        preferredName: "John",
-        fullName: "John Doe",
-        email: "john.doe@gmail.com",
-        location: "Lima, Peru",
-        profileViews: 367,
-        biography:
-          "Freelance UX/UI designer, 80+ projects in Web, Mobile (Android & iOS) and creative projects. Open to offers.",
-        about:
-          "I'm more experienced in e-commerce web projects and mobile banking apps, but also like to work with creative projects, such as landing pages or unusual corporate websites.",
-      };
-    }
-
-    return {};
+    return this.user;
   }
 }
+
+export const GlobalAuthService = new AuthenticationService();
