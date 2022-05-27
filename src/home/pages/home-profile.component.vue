@@ -191,6 +191,27 @@ watchEffect(() => {
           </div>
         </div>
       </div>
+      <div class="p-8 bg-white space-y-4">
+        <span class="text-xl font-semibold block">Education</span>
+        <div>
+          <div class="flex space-x-4">
+            <Avatar
+              class="avatar-contain flex-shrink-0 !h-16 !w-16"
+              image="https://unsplash.com/photos/QJDzYT_K8Xg/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8c3R1ZHl8ZXN8MHx8fHwxNjUzNTgzMjU3&w=640"
+              shape="circle" />
+            <div class="flex flex-col w-full">
+              <span class="p-2 text-base font-medium text-slate-900"
+                >University of Arizona</span
+              >
+              <span class="p-2 text-xs font-light">2009 - 2013</span>
+              <p class="p-2 text-sm text-slate-900">
+                Bachelor's degree in Computer and Information Systems and
+                Security/Information Assurance
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
