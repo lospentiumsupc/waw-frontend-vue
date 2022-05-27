@@ -1,7 +1,5 @@
 <script setup>
 import InputText from "primevue/inputtext";
-import { ref } from "vue/dist/vue";
-const password = ref("");
 </script>
 
 <template>
