@@ -3,22 +3,22 @@ import InputMask from "primevue/inputmask";
 import InputText from "primevue/inputtext";
 import ToggleButton from "primevue/togglebutton";
 import { PrimeIcons } from "primevue/api";
-import { $ref } from "vue/macros";
-import { AuthService } from "../services/auth.service";
+import { ref } from "vue";
+import { GlobalAuthService } from "../services/auth.service";
 import { useRouter, RouterLink } from "vue-router";
 
-const checked = $ref(false);
-const fullname = $ref("");
-const username = $ref("");
-const email = $ref("");
-const password = $ref("");
-const phone = $ref("");
+const checked = ref(false);
+const fullname = ref("");
+const username = ref("");
+const email = ref("");
+const password = ref("");
+const phone = ref("");
 
-const auth = $ref(AuthService.instance);
+const auth = ref(GlobalAuthService);
 const router = useRouter();
 
 const handleRegister = () => {
-  auth.login();
+  auth.value.login();
   router.push("/");
 };
 </script>
