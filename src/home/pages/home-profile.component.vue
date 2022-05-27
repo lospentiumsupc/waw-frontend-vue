@@ -1,24 +1,24 @@
 <script setup>
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
-import { AuthenticationService } from "@/accounts/services/authentication.service";
+import { GlobalAuthService } from "@/accounts/services/auth.service";
 import { onBeforeMount, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { toLocaleMonth } from "@/core/utils/months";
 
-const auth = ref(AuthenticationService.instance);
-const user = ref(auth.value.getCurrentUser());
+const auth = GlobalAuthService;
+const user = ref(auth.user);
 
 const router = useRouter();
 
 onBeforeMount(() => {
-  if (!auth.value.loggedIn) {
+  if (!auth.loggedIn) {
     router.push("/account/signin");
   }
 });
 
 watchEffect(() => {
-  user.value = auth.value.getCurrentUser();
+  user.value = auth.user;
 });
 
 const getDisplayableDate = date => {
@@ -52,7 +52,7 @@ const getDisplayableExpDates = (start, end) => {
 };
 </script>
 <template>
-  <div class="p-16 flex space-x-8 max-w-screen-2xl">
+  <div v-if="auth.loggedIn" class="p-16 flex space-x-8 max-w-screen-2xl">
     <div class="w-3/4 space-y-8">
       <div class="flex flex-col rounded bg-white overflow-hidden">
         <div class="flex items-center w-full h-48 overflow-hidden">
@@ -64,7 +64,7 @@ const getDisplayableExpDates = (start, end) => {
           <div class="px-8 pb-8 relative">
             <span class="h-32 w-48 block" />
             <Avatar
-              class="avatar-contain h-48 w-48 absolute inset-0 left-8 -top-16 border-8 border-white"
+              class="avatar-contain !h-48 !w-48 absolute inset-0 left-8 -top-16 border-8 border-white"
               image="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640"
               shape="circle" />
           </div>
