@@ -23,23 +23,22 @@ onMounted(async () => {
     :rows="10"
     :rows-per-page-options="[5, 10, 15]"
     current-page-report-template="Showing {first} to {last} of {totalRecords} job offers"
-    responsive-layout="scroll">
+    responsive-layout="scroll"
+    class="rounded overflow-hidden">
     <template #header>
       <div
         class="table-header flex flex-column md:flex-row md:justify-content-between">
-        <h5 class="mb-2 md:m-0 p-as-md-center text-xl">Available job offers</h5>
-        <span class="p-input-icon-left">
-          <i class="pi pi-search" />
-          <InputText placeholder="Search..." />
-        </span>
+        <h2 class="mb-2 md:m-0 p-as-md-center text-xl">Available job offers</h2>
       </div>
     </template>
-    <Column field="id" header="ID" :sortable="true"></Column>
-    <Column field="title" header="Title" :sortable="true"></Column>
-    <Column field="description" header="Description" :sortable="true"></Column>
-    <Column field="salaryRange" header="Salary Range" :sortable="true"></Column>
+    <Column field="id" header="ID" :sortable="true" />
+    <Column field="title" header="Title" :sortable="true" />
+    <Column field="description" header="Description" :sortable="true" />
+    <Column field="salaryRange" header="Salary Range" :sortable="true" />
     <Column header="Action">
-      <Button label="Apply"></Button>
+      <template #body>
+        <Button label="Apply" class="p-button-primary p-button-text"></Button>
+      </template>
     </Column>
   </DataTable>
 </template>
