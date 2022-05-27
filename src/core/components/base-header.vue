@@ -3,7 +3,8 @@ import Menu from "primevue/menu";
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
 import { useMq } from "vue3-mq";
-import { onMounted, ref, watchEffect } from "vue";
+import { onMounted, watchEffect } from "vue";
+import { $ref } from "vue/macros";
 import { RouterLink, useRouter } from "vue-router";
 import { AuthenticationService } from "@/accounts/services/authentication.service";
 
@@ -11,11 +12,11 @@ const mq = useMq();
 
 const router = useRouter();
 
-const auth = ref(AuthenticationService.instance);
-const user = ref(auth.value.getCurrentUser());
+const auth = $ref(AuthenticationService.instance);
+let user = $ref(auth.getCurrentUser());
 
 watchEffect(() => {
-  user.value = auth.value.getCurrentUser();
+  user = auth.getCurrentUser();
 });
 
 const navigation = [
@@ -25,47 +26,47 @@ const navigation = [
   { label: "Notices", path: "/notifications", icon: PrimeIcons.BELL },
 ];
 
-const search = ref("");
+const search = $ref("");
 
-/** @type {import("vue").Ref<import("primevue/menu").default>} */
-const menuRef = ref();
+/** @type {import("primevue/menu").default} */
+const menuRef = $ref();
 /** @param {MouseEvent} event */
 const toggleMenu = event => {
-  menuRef.value.toggle(event);
+  menuRef.toggle(event);
 };
 
 /** @type {import("vue").Ref<import("primevue/menuitem").MenuItem[]>} */
-const accountMenu = ref([]);
+let accountMenu = $ref([]);
 const updateMenu = () => {
-  accountMenu.value = [
+  accountMenu = [
     {
       label: "Sign In",
       to: "/account/signin",
       icon: PrimeIcons.SIGN_IN,
-      visible: !auth.value.loggedIn,
+      visible: !auth.loggedIn,
     },
     {
       label: "Sign Up",
       to: "/account/signup",
       icon: PrimeIcons.USER_PLUS,
-      visible: !auth.value.loggedIn,
+      visible: !auth.loggedIn,
     },
     ...navigation.map(item => ({
       label: item.label,
       icon: item.icon,
-      visible: mq.mdMinus && auth.value.loggedIn,
+      visible: mq.mdMinus && auth.loggedIn,
     })),
-    { separator: true, visible: mq.mdMinus && auth.value.loggedIn },
-    { label: "Profile", icon: PrimeIcons.USER, visible: auth.value.loggedIn },
-    { label: "Options", icon: PrimeIcons.COG, visible: auth.value.loggedIn },
+    { separator: true, visible: mq.mdMinus && auth.loggedIn },
+    { label: "Profile", icon: PrimeIcons.USER, visible: auth.loggedIn },
+    { label: "Options", icon: PrimeIcons.COG, visible: auth.loggedIn },
     {
       label: "Sign Out",
       command: () => {
-        auth.value.logout();
+        auth.logout();
         router.push("/account/signin");
       },
       icon: PrimeIcons.POWER_OFF,
-      visible: auth.value.loggedIn,
+      visible: auth.loggedIn,
     },
   ];
 };
