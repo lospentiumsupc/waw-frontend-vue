@@ -1,17 +1,17 @@
 <script setup>
 import InputText from "primevue/inputtext";
-import { $ref } from "vue/macros";
+import { ref } from "vue";
 import { useRouter, RouterLink } from "vue-router";
 import { AuthenticationService } from "../services/authentication.service";
 
-const email = $ref("");
-const password = $ref("");
+const email = ref("");
+const password = ref("");
 
 const router = useRouter();
-const auth = $ref(AuthenticationService.instance);
+const auth = ref(AuthenticationService.instance);
 
 const handleLogin = () => {
-  auth.login();
+  auth.value.login();
   router.push("/");
 };
 </script>

@@ -1,6 +1,6 @@
 <script setup>
 import Dropdown from "primevue/dropdown";
-import { $ref } from "vue/macros";
+import { ref } from "vue";
 
 const navigation = [
   {
@@ -30,7 +30,7 @@ const languages = [
   { label: "English", code: "en_US" },
   { label: "Spanish", code: "es_PE" },
 ];
-const selectedLang = $ref(languages[0]);
+const selectedLang = ref(languages[0]);
 </script>
 
 <template>
