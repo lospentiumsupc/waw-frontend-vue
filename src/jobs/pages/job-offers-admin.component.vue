@@ -1,6 +1,4 @@
 <script setup>
-import { JobsService } from "../services/jobs.service";
-import { FilterMatchMode, PrimeIcons } from "primevue/api";
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
@@ -10,6 +8,7 @@ import Tag from "primevue/tag";
 import Dropdown from "primevue/dropdown";
 import TextArea from "primevue/textarea";
 import Dialog from "primevue/dialog";
+import { PrimeIcons } from "primevue/api";
 </script>
 
 <template>
@@ -66,6 +65,8 @@ import Dialog from "primevue/dialog";
             </span>
           </div>
         </template>
+        <template #empty> No offers found. </template>
+        <template #loading> Loading offers data. Please wait. </template>
 
         <Column selection-mode="multiple" :exportable="false" class="w-12">
         </Column>
@@ -265,6 +266,10 @@ import Dialog from "primevue/dialog";
 </template>
 
 <script>
+// eslint-disable-next-line no-duplicate-imports
+import { FilterMatchMode } from "primevue/api";
+import { JobsService } from "@/jobs/services/jobs.service";
+
 export default {
   name: "JobOfferList",
   data() {
