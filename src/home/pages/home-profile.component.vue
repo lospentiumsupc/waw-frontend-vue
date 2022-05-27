@@ -62,64 +62,48 @@ watchEffect(() => {
           <span class="text-xl text-slate-500 block"> 3 of 12</span>
         </div>
         <div class="flex space-x-4">
-          <div class="w-full md:w-1/2 xl:w-1/3 px-4">
-            <div class="bg-white rounded-lg overflow-hidden mb-10">
+          <div class="flex flex-col space-y-4">
+            <div class="overflow-hidden">
               <img
                 src="https://unsplash.com/photos/T6fDN60bMWY/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8dXglMkZ1aSUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NTA5MDc&w=640"
                 alt="work's image"
-                class="w-full" />
-              <div class="py-2 sm:p-9 md:p-7 xl:p-9">
-                <h3>
-                  <a
-                    href="project"
-                    class="mt-6 text-base font-medium text-slate-600">
-                    Zara redisign concept
-                  </a>
-                </h3>
-                <p class="text-sm font-light mb-7">
-                  UX/UI Design - July 5, 2019
-                </p>
-              </div>
+                class="w-full object-contain" />
+            </div>
+            <div class="flex flex-col space-y-2">
+              <a class="font-medium text-slate-600"> Zara redisign concept </a>
+              <span class="text-sm font-light text-slate-600">
+                UX/UI Design - July 5, 2019
+              </span>
             </div>
           </div>
-          <div class="w-full md:w-1/2 xl:w-1/3 px-4">
-            <div class="bg-white rounded-lg overflow-hidden mb-10">
+          <div class="flex flex-col space-y-4">
+            <div class="overflow-hidden">
               <img
                 src="https://unsplash.com/photos/v9vII5gV8Lw/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
                 alt="work's image"
-                class="w-full" />
-              <div class="p-8 sm:p-9 md:p-7 xl:p-9">
-                <h3>
-                  <a
-                    href="project"
-                    class="mt-6 text-base font-medium text-slate-600">
-                    SCTHON Event Brand Identity
-                  </a>
-                </h3>
-                <p class="text-sm font-light mb-7">
-                  Graphic Design - March 31, 2019
-                </p>
-              </div>
+                class="w-full object-contain" />
+            </div>
+            <div class="flex flex-col space-y-2">
+              <a class="font-medium text-slate-600">
+                SCTHON Event Brand Identity
+              </a>
+              <span class="text-sm font-light text-slate-600">
+                Graphic Design - March 31, 2019
+              </span>
             </div>
           </div>
-          <div class="w-full md:w-1/2 xl:w-1/3 px-4">
-            <div class="bg-white rounded-lg overflow-hidden mb-10">
+          <div class="flex flex-col space-y-4">
+            <div class="overflow-hidden">
               <img
                 src="https://unsplash.com/photos/CGpifH3FjOA/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
                 alt="work's image"
-                class="w-full" />
-              <div class="p-8 sm:p-9 md:p-7 xl:p-9">
-                <h3>
-                  <a
-                    href="project"
-                    class="mt-6 text-base font-medium text-slate-600">
-                    Dzord Brand Identity
-                  </a>
-                </h3>
-                <p class="text-sm font-light mb-7">
-                  Graphic Design - April 4, 2016
-                </p>
-              </div>
+                class="w-full object-contain" />
+            </div>
+            <div class="flex flex-col space-y-2">
+              <a class="font-medium text-slate-600"> Dzord Brand Identity</a>
+              <span class="text-sm font-light text-slate-600">
+                Graphic Design - April 4, 2016
+              </span>
             </div>
           </div>
         </div>
