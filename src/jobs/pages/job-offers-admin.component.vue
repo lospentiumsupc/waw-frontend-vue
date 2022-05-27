@@ -133,7 +133,7 @@ import { PrimeIcons } from "primevue/api";
           </template>
         </Column>
         <template #footer>
-          In total there are {{ jobOffers ? jobOffer.length : 0 }} job offers.
+          In total there are {{ jobOffers ? jobOffers.length : 0 }} job offers.
         </template>
       </DataTable>
     </div>
