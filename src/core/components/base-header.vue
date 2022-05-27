@@ -26,6 +26,12 @@ const navigation = [
 ];
 
 const search = ref("");
+// TODO: Redirect to search table temporarily, will change later
+const handleSearch = () => {
+  if (auth.loggedIn) {
+    router.push("/jobs/search");
+  }
+};
 
 /** @type {import("vue").Ref<import("primevue/menu").default>} */
 const menuRef = ref();
@@ -98,7 +104,8 @@ const accountMenu = [
       </nav>
     </div>
     <div
-      class="h-full w-full hidden sm:flex items-center border-x border-slate-200">
+      class="h-full w-full hidden sm:flex items-center border-x border-slate-200"
+      @click="handleSearch">
       <i :class="PrimeIcons.SEARCH" class="ml-4 text-xl text-slate-400"></i>
       <input
         v-model="search"

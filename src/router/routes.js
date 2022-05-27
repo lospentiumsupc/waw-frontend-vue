@@ -49,4 +49,9 @@ export const routes = [
     name: "Job Offers",
     component: () => import("@/jobs/pages/job-offers-admin.component.vue"),
   },
+  {
+    path: "/jobs/search",
+    name: "Job Search",
+    component: () => import("@/jobs/pages/job-offers-display.component.vue"),
+  },
 ];
