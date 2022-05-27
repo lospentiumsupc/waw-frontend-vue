@@ -127,6 +127,70 @@ watchEffect(() => {
           Show all (12)
         </span>
       </div>
+      <div class="p-8 bg-white space-y-4">
+        <span class="text-xl font-semibold block">Experience</span>
+        <div>
+          <div class="flex space-x-4">
+            <Avatar
+              class="avatar-contain flex-shrink-0 !h-16 !w-16"
+              image="https://unsplash.com/photos/gcsNOsPEXfs/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjUzNjM1MTI3&w=640"
+              shape="circle" />
+            <div class="flex flex-col w-full">
+              <span class="p-2 text-base font-medium text-slate-900"
+                >Freelance UX/UI Designer</span
+              >
+              <div class="spacey-2">
+                <span class="p-2 text-sm text-slate-800">Self-employed</span>
+                <span class="p-2 text-sm font-light text-slate-600"
+                  >Around the world</span
+                >
+              </div>
+              <div class="spacey-2">
+                <span class="p-2 text-xs font-light text-slate-800"
+                  >Jun 2016 — Present</span
+                >
+                <span class="p-2 text-xs font-semibold text-slate-600"
+                  >5 years 10 months</span
+                >
+              </div>
+              <p class="p-2 text-sm text-slate-900">
+                Work with clients and studios as freelancer. Work in areas like:
+                e-commerce web projects; creative landing pages; Android and iOS
+                apps; corporate web sites and corporate identity.
+              </p>
+            </div>
+          </div>
+          <div class="flex space-x-4">
+            <Avatar
+              class="avatar-contain flex-shrink-0 !h-16 !w-16"
+              image="https://unsplash.com/photos/hhUx08PuYpc/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MTB8fHN0dWR5fGVzfDB8fHx8MTY1MzU4MzI1Nw&w=640"
+              shape="circle" />
+            <div class="flex flex-col w-full">
+              <span class="p-2 text-base font-medium text-slate-900"
+                >UX/UI designer</span
+              >
+              <div class="spacey-2">
+                <span class="p-2 text-sm text-slate-800">Upwork</span>
+                <span class="p-2 text-sm font-light text-slate-600"
+                  >United States</span
+                >
+              </div>
+              <div class="spacey-2">
+                <span class="p-2 text-xs font-light text-slate-800"
+                  >April 2015 — Aug 2016</span
+                >
+                <span class="p-2 text-xs font-semibold text-slate-600"
+                  >2 years 4 months</span
+                >
+              </div>
+              <p class="p-2 text-sm text-slate-900">
+                New experience with Upwork system. Work in areas like: UX/UI
+                design, graphic design, interaction design, UX research.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
