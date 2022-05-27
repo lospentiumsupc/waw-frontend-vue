@@ -5,23 +5,23 @@ import { GlobalAuthService } from "@/accounts/services/auth.service";
 import { onBeforeMount, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 
-const auth = ref(GlobalAuthService);
-const user = ref(auth.value.getCurrentUser());
+const auth = GlobalAuthService;
+const user = ref(auth.user);
 
 const router = useRouter();
 
 onBeforeMount(() => {
-  if (!auth.value.loggedIn) {
+  if (!auth.loggedIn) {
     router.push("/account/signin");
   }
 });
 
 watchEffect(() => {
-  user.value = auth.value.getCurrentUser();
+  user.value = auth.user;
 });
 </script>
 <template>
-  <div class="p-16 flex space-x-8 max-w-screen-2xl">
+  <div v-if="auth.loggedIn" class="p-16 flex space-x-8 max-w-screen-2xl">
     <div class="w-3/4 space-y-8">
       <div class="flex flex-col rounded bg-white overflow-hidden">
         <div class="flex items-center w-full h-48 overflow-hidden">

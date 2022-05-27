@@ -3,7 +3,7 @@ import Menu from "primevue/menu";
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
 import { useMq } from "vue3-mq";
-import { onMounted, ref, watchEffect } from "vue";
+import { ref, watchEffect } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { GlobalAuthService } from "@/accounts/services/auth.service";
 
@@ -11,11 +11,11 @@ const mq = useMq();
 
 const router = useRouter();
 
-const auth = ref(GlobalAuthService);
-const user = ref(auth.value.getCurrentUser());
+const auth = GlobalAuthService;
+const user = ref(auth.user);
 
 watchEffect(() => {
-  user.value = auth.value.getCurrentUser();
+  user.value = auth.user;
 });
 
 const navigation = [
@@ -29,51 +29,47 @@ const search = ref("");
 
 /** @type {import("vue").Ref<import("primevue/menu").default>} */
 const menuRef = ref();
-/** @param {MouseEvent} event */
-const toggleMenu = event => {
-  menuRef.value.toggle(event);
-};
 
-/** @type {import("vue").Ref<import("primevue/menuitem").MenuItem[]>} */
-const accountMenu = ref([]);
-const updateMenu = () => {
-  accountMenu.value = [
-    {
-      label: "Sign In",
-      to: "/account/signin",
-      icon: PrimeIcons.SIGN_IN,
-      visible: !auth.value.loggedIn,
+/** @type {import("primevue/menuitem").MenuItem[]} */
+const accountMenu = [
+  {
+    label: "Sign In",
+    to: "/account/signin",
+    icon: PrimeIcons.SIGN_IN,
+    visible: () => !auth.loggedIn,
+  },
+  {
+    label: "Sign Up",
+    to: "/account/signup",
+    icon: PrimeIcons.USER_PLUS,
+    visible: () => !auth.loggedIn,
+  },
+  ...navigation.map(item => ({
+    label: item.label,
+    icon: item.icon,
+    visible: () => mq.mdMinus && auth.loggedIn,
+  })),
+  { separator: true, visible: () => mq.mdMinus && auth.loggedIn },
+  {
+    label: "Profile",
+    icon: PrimeIcons.USER,
+    visible: () => auth.loggedIn,
+  },
+  {
+    label: "Options",
+    icon: PrimeIcons.COG,
+    visible: () => auth.loggedIn,
+  },
+  {
+    label: "Sign Out",
+    command: () => {
+      auth.logout();
+      router.push("/account/signin");
     },
-    {
-      label: "Sign Up",
-      to: "/account/signup",
-      icon: PrimeIcons.USER_PLUS,
-      visible: !auth.value.loggedIn,
-    },
-    ...navigation.map(item => ({
-      label: item.label,
-      icon: item.icon,
-      visible: mq.mdMinus && auth.value.loggedIn,
-    })),
-    { separator: true, visible: mq.mdMinus && auth.value.loggedIn },
-    { label: "Profile", icon: PrimeIcons.USER, visible: auth.value.loggedIn },
-    { label: "Options", icon: PrimeIcons.COG, visible: auth.value.loggedIn },
-    {
-      label: "Sign Out",
-      command: () => {
-        auth.value.logout();
-        router.push("/account/signin");
-      },
-      icon: PrimeIcons.POWER_OFF,
-      visible: auth.value.loggedIn,
-    },
-  ];
-};
-
-// Set the menu the first time the component is mounted
-onMounted(updateMenu);
-// Update it anytime the mq object changes
-watchEffect(updateMenu);
+    icon: PrimeIcons.POWER_OFF,
+    visible: () => auth.loggedIn,
+  },
+];
 </script>
 
 <template>
@@ -111,16 +107,23 @@ watchEffect(updateMenu);
     </div>
     <div
       class="flex items-center shrink-0 space-x-4 cursor-pointer"
-      @click="toggleMenu">
-      <Avatar
-        class="avatar-contain"
-        image="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&w=128"
-        shape="circle" />
-      <div class="hidden lg:flex flex-col space-y-1">
-        <span v-if="auth.loggedIn" class="text-xs font-medium">
-          Hello, {{ user.preferredName }}
+      @click="event => menuRef.toggle(event)">
+      <div class="rounded-full overflow-hidden w-8 h-8">
+        <Avatar
+          v-if="auth.loggedIn && user?.picture?.href"
+          class="avatar-contain"
+          :image="user.picture.href"
+          shape="circle" />
+        <span
+          v-else
+          class="w-full h-full rounded-full border-2 border-black flex justify-center items-center">
+          <i class="text-xl text-black mt-1" :class="PrimeIcons.USER"></i>
         </span>
-        <span v-else class="text-xs font-medium">Hello, Sign In</span>
+      </div>
+      <div class="hidden lg:flex flex-col space-y-1">
+        <span class="text-xs font-medium">
+          Hello, {{ auth.loggedIn ? user.preferredName : "Sign In" }}
+        </span>
         <span v-if="auth.loggedIn" class="text-xs font-normal text-slate-600">
           {{ user.profileViews }} views today
         </span>
