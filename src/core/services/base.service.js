@@ -8,6 +8,9 @@ export class BaseService {
    * @param {string} path
    */
   constructor(path) {
+    if (typeof path !== "string") {
+      throw new Error("Missing path for BaseService");
+    }
     this.endpoint = this.formatEndpoint(path);
   }
 
