@@ -4,6 +4,7 @@ import { PrimeIcons } from "primevue/api";
 import { GlobalAuthService } from "@/accounts/services/auth.service";
 import { onBeforeMount, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
+import { toLocaleMonth } from "@/core/utils/months";
 
 const auth = GlobalAuthService;
 const user = ref(auth.user);
@@ -19,6 +20,36 @@ onBeforeMount(() => {
 watchEffect(() => {
   user.value = auth.user;
 });
+
+const getDisplayableDate = date => {
+  if (typeof date !== "number") {
+    throw new Error(`Invalid date, got ${typeof date}: ${date}`);
+  }
+
+  const parsed = new Date(date);
+  const month = toLocaleMonth(date, true);
+  const day = parsed.getDate();
+  const year = parsed.getFullYear();
+  return `${month} ${day}, ${year}`;
+};
+
+const getDisplayableExpDates = (start, end) => {
+  if (typeof start !== "number") {
+    throw new Error(`Invalid start date, got ${typeof start}: ${start}`);
+  }
+
+  const msgs = { start: "", end: "Present" };
+
+  const startDate = new Date(start);
+  msgs.start = `${toLocaleMonth(startDate)} ${startDate.getFullYear()}`;
+
+  if (typeof end !== "number") {
+    const endDate = new Date(end);
+    msgs.end = `${toLocaleMonth(endDate)} ${startDate.getFullYear()}`;
+  }
+
+  return `${msgs.start} — ${msgs.end}`;
+};
 </script>
 <template>
   <div v-if="auth.loggedIn" class="p-16 flex space-x-8 max-w-screen-2xl">
@@ -56,76 +87,117 @@ watchEffect(() => {
         <p class="text-lg text-slate-700">{{ user.about }}</p>
         <span class="uppercase font-bold text-slate-600 block">See more</span>
       </div>
-      <section class="lg:pt-32 lg:pb-20 bg-white">
-        <div class="container">
-          <div class="flex flex-col p-8 w-full space-y-3">
-            <span class="text-xl font-semibold block">Projects</span>
-            <span class="text-xl text-slate-500 block"> 3 of 12</span>
-          </div>
-          <div class="flex flex-wrap -mx-4">
-            <div class="w-full md:w-1/2 xl:w-1/3 px-4">
-              <div class="bg-white rounded-lg overflow-hidden mb-10">
-                <img
-                  src="https://unsplash.com/photos/T6fDN60bMWY/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8dXglMkZ1aSUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NTA5MDc&w=640"
-                  alt="work's image"
-                  class="w-full" />
-                <div class="py-2 sm:p-9 md:p-7 xl:p-9">
-                  <h3>
-                    <a
-                      href="project"
-                      class="mt-6 text-base font-medium text-slate-600">
-                      Zara redisign concept
-                    </a>
-                  </h3>
-                  <p class="text-sm font-light mb-7">
-                    UX/UI Design - July 5, 2019
-                  </p>
-                </div>
-              </div>
+      <div
+        v-if="Array.isArray(user.projects)"
+        class="p-8 rounded bg-white space-y-4">
+        <div class="flex">
+          <span class="text-xl font-semibold block mr-2">Projects</span>
+          <span class="text-xl text-slate-500 block">
+            3 of {{ user.projects.length }}
+          </span>
+        </div>
+        <div class="flex space-x-4">
+          <div
+            v-for="item in user.projects"
+            :key="item.id"
+            class="flex flex-col space-y-4">
+            <div class="overflow-hidden">
+              <img
+                :src="item.image?.href"
+                :alt="item.image?.alt"
+                class="w-full object-contain" />
             </div>
-            <div class="w-full md:w-1/2 xl:w-1/3 px-4">
-              <div class="bg-white rounded-lg overflow-hidden mb-10">
-                <img
-                  src="https://unsplash.com/photos/v9vII5gV8Lw/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
-                  alt="work's image"
-                  class="w-full" />
-                <div class="p-8 sm:p-9 md:p-7 xl:p-9">
-                  <h3>
-                    <a
-                      href="project"
-                      class="mt-6 text-base font-medium text-slate-600">
-                      SCTHON Event Brand Identity
-                    </a>
-                  </h3>
-                  <p class="text-sm font-light mb-7">
-                    Graphic Design - March 31, 2019
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 xl:w-1/3 px-4">
-              <div class="bg-white rounded-lg overflow-hidden mb-10">
-                <img
-                  src="https://unsplash.com/photos/CGpifH3FjOA/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
-                  alt="work's image"
-                  class="w-full" />
-                <div class="p-8 sm:p-9 md:p-7 xl:p-9">
-                  <h3>
-                    <a
-                      href="project"
-                      class="mt-6 text-base font-medium text-slate-600">
-                      Dzord Brand Identity
-                    </a>
-                  </h3>
-                  <p class="text-sm font-light mb-7">
-                    Graphic Design - April 4, 2016
-                  </p>
-                </div>
-              </div>
+            <div class="flex flex-col space-y-2">
+              <a class="font-medium text-slate-600">
+                {{ item.title }}
+              </a>
+              <span class="text-sm font-light text-slate-600">
+                {{ item.summary }} — {{ getDisplayableDate(item.timestamp) }}
+              </span>
             </div>
           </div>
         </div>
-      </section>
+        <span class="uppercase font-bold text-slate-600 block">
+          Show all ({{ user.projects.length }})
+        </span>
+      </div>
+      <div v-if="Array.isArray(user.experience)" class="p-8 bg-white space-y-4">
+        <span class="text-xl font-semibold block">Experience</span>
+        <div class="space-y-4">
+          <div
+            v-for="item in user.experience"
+            :key="item.id"
+            class="flex space-x-4">
+            <Avatar
+              class="avatar-contain flex-shrink-0 !h-16 !w-16"
+              :image="item.image?.href"
+              shape="circle" />
+            <div class="flex flex-col w-full">
+              <span class="font-medium text-slate-900">
+                {{ item.title }}
+              </span>
+              <div class="space-x-2">
+                <span class="text-sm text-slate-800">{{ item.company }}</span>
+                <span class="text-sm font-light text-slate-600">
+                  {{ item.location }}
+                </span>
+              </div>
+              <div class="space-x-2">
+                <span class="text-xs font-light text-slate-800">
+                  {{ getDisplayableExpDates(item.startDate, item.endDate) }}
+                </span>
+                <span class="text-xs font-semibold text-slate-600">
+                  {{ item.timeDiff }}
+                </span>
+              </div>
+              <p class="text-sm text-slate-900">
+                {{ item.description }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="Array.isArray(user.education)" class="p-8 bg-white space-y-4">
+        <span class="text-xl font-semibold block">Education</span>
+        <div class="space-y-4">
+          <div
+            v-for="item in user.education"
+            :key="item.id"
+            class="flex space-x-4">
+            <Avatar
+              class="avatar-contain flex-shrink-0 !h-16 !w-16"
+              :image="item.image?.href"
+              shape="circle" />
+            <div class="flex flex-col w-full">
+              <span class="text-base font-medium text-slate-900">
+                {{ item.university }}
+              </span>
+              <span class="text-xs font-light">
+                {{ item.startYear }} — {{ item.endYear }}
+              </span>
+              <p class="text-sm text-slate-900">
+                {{ item.description }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-8 bg-white space-y-4">
+        <div class="flex flex-wrap py-2">
+          <span class="text-xl font-semibold block">Comments</span>
+          <div class="w-full md:w-full mb-2 mt-2 py-2">
+            <textarea
+              class="bg-gray-100 rounded border border-gray-400 leading-normal resize-none w-full h-20 py-2 px-3 font-light placeholder-gray-700 focus:outline-none focus:bg-white"
+              name="body"
+              placeholder="Type Your Comment"
+              required=""></textarea>
+          </div>
+          <input
+            type="submit"
+            class="bg-white text-gray-900 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100"
+            value="Post Comment" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
