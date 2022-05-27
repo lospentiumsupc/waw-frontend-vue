@@ -7,7 +7,7 @@ import Column from "primevue/column";
 import Tag from "primevue/tag";
 import Dropdown from "primevue/dropdown";
 import TextArea from "primevue/textarea";
-import Dialog from "primevue/";
+import Dialog from "primevue/dialog";
 </script>
 
 <template>
