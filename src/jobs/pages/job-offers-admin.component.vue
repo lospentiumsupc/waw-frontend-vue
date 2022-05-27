@@ -274,7 +274,7 @@ export default {
       deleteJobOfferDialog: false,
       deleteJobOffersDialog: false,
       jobOffer: {},
-      selectedJobOffers: null,
+      selectedJobOffers: [],
       filters: {},
       submitted: false,
       statuses: [
@@ -401,7 +401,7 @@ export default {
         });
       });
       this.deleteJobOffersDialog = false;
-      this.selectedJobOffers = null;
+      this.selectedJobOffers = [];
       this.$toast.add({
         severity: "success",
         summary: "Successful",
