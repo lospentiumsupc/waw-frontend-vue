@@ -40,8 +40,8 @@ const handleLogin = () => {
       </span>
       <div>
         <RouterLink to="/account/resetpassword" class="font-semibold">
-          Forgot password?</RouterLink
-        >
+          Forgot password?
+        </RouterLink>
       </div>
       <div class="my-2 w-full">
         <button
