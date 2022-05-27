@@ -1,7 +1,7 @@
 import { BaseService } from "@/core/services/base.service";
 import { http } from "@/core/services/http-common";
 
-export class AuthenticationService extends BaseService {
+export class AuthService extends BaseService {
   user = null;
 
   get loggedIn() {
@@ -25,4 +25,4 @@ export class AuthenticationService extends BaseService {
   }
 }
 
-export const GlobalAuthService = new AuthenticationService();
+export const GlobalAuthService = new AuthService();

@@ -2,13 +2,13 @@
 import InputText from "primevue/inputtext";
 import { $ref } from "vue/macros";
 import { useRouter, RouterLink } from "vue-router";
-import { AuthenticationService } from "../services/authentication.service";
+import { AuthService } from "../services/auth.service";
 
 const email = $ref("");
 const password = $ref("");
 
 const router = useRouter();
-const auth = $ref(AuthenticationService.instance);
+const auth = $ref(AuthService.instance);
 
 const handleLogin = () => {
   auth.login();

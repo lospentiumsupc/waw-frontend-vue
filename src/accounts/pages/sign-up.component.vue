@@ -4,7 +4,7 @@ import InputText from "primevue/inputtext";
 import ToggleButton from "primevue/togglebutton";
 import { PrimeIcons } from "primevue/api";
 import { $ref } from "vue/macros";
-import { AuthenticationService } from "../services/authentication.service";
+import { AuthService } from "../services/auth.service";
 import { useRouter, RouterLink } from "vue-router";
 
 const checked = $ref(false);
@@ -14,7 +14,7 @@ const email = $ref("");
 const password = $ref("");
 const phone = $ref("");
 
-const auth = $ref(AuthenticationService.instance);
+const auth = $ref(AuthService.instance);
 const router = useRouter();
 
 const handleRegister = () => {

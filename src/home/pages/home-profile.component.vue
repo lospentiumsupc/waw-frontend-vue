@@ -1,12 +1,12 @@
 <script setup>
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
-import { AuthenticationService } from "@/accounts/services/authentication.service";
+import { AuthService } from "@/accounts/services/auth.service";
 import { onBeforeMount, watchEffect } from "vue";
 import { $ref } from "vue/macros";
 import { useRouter } from "vue-router";
 
-const auth = $ref(AuthenticationService.instance);
+const auth = $ref(AuthService.instance);
 let user = $ref(auth.getCurrentUser());
 
 const router = useRouter();

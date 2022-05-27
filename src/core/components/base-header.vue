@@ -6,13 +6,13 @@ import { useMq } from "vue3-mq";
 import { onMounted, watchEffect } from "vue";
 import { $ref } from "vue/macros";
 import { RouterLink, useRouter } from "vue-router";
-import { AuthenticationService } from "@/accounts/services/authentication.service";
+import { AuthService } from "@/accounts/services/auth.service";
 
 const mq = useMq();
 
 const router = useRouter();
 
-const auth = $ref(AuthenticationService.instance);
+const auth = $ref(AuthService.instance);
 let user = $ref(auth.getCurrentUser());
 
 watchEffect(() => {
