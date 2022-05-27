@@ -4,6 +4,7 @@ import { PrimeIcons } from "primevue/api";
 import { AuthenticationService } from "@/accounts/services/authentication.service";
 import { onBeforeMount, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
+import { toLocaleMonth } from "@/core/utils/months";
 
 const auth = ref(AuthenticationService.instance);
 const user = ref(auth.value.getCurrentUser());
@@ -19,6 +20,36 @@ onBeforeMount(() => {
 watchEffect(() => {
   user.value = auth.value.getCurrentUser();
 });
+
+const getDisplayableDate = date => {
+  if (typeof date !== "number") {
+    throw new Error(`Invalid date, got ${typeof date}: ${date}`);
+  }
+
+  const parsed = new Date(date);
+  const month = toLocaleMonth(date, true);
+  const day = parsed.getDate();
+  const year = parsed.getFullYear();
+  return `${month} ${day}, ${year}`;
+};
+
+const getDisplayableExpDates = (start, end) => {
+  if (typeof start !== "number") {
+    throw new Error(`Invalid start date, got ${typeof start}: ${start}`);
+  }
+
+  const msgs = { start: "", end: "Present" };
+
+  const startDate = new Date(start);
+  msgs.start = `${toLocaleMonth(startDate)} ${startDate.getFullYear()}`;
+
+  if (typeof end !== "number") {
+    const endDate = new Date(end);
+    msgs.end = `${toLocaleMonth(endDate)} ${startDate.getFullYear()}`;
+  }
+
+  return `${msgs.start} — ${msgs.end}`;
+};
 </script>
 <template>
   <div class="p-16 flex space-x-8 max-w-screen-2xl">
@@ -56,141 +87,96 @@ watchEffect(() => {
         <p class="text-lg text-slate-700">{{ user.about }}</p>
         <span class="uppercase font-bold text-slate-600 block">See more</span>
       </div>
-      <div class="p-8 rounded bg-white space-y-4">
+      <div
+        v-if="Array.isArray(user.projects)"
+        class="p-8 rounded bg-white space-y-4">
         <div class="flex">
           <span class="text-xl font-semibold block mr-2">Projects</span>
-          <span class="text-xl text-slate-500 block"> 3 of 12</span>
+          <span class="text-xl text-slate-500 block">
+            3 of {{ user.projects.length }}
+          </span>
         </div>
         <div class="flex space-x-4">
-          <div class="flex flex-col space-y-4">
+          <div
+            v-for="item in user.projects"
+            :key="item.id"
+            class="flex flex-col space-y-4">
             <div class="overflow-hidden">
               <img
-                src="https://unsplash.com/photos/T6fDN60bMWY/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8dXglMkZ1aSUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NTA5MDc&w=640"
-                alt="work's image"
-                class="w-full object-contain" />
-            </div>
-            <div class="flex flex-col space-y-2">
-              <a class="font-medium text-slate-600"> Zara redisign concept </a>
-              <span class="text-sm font-light text-slate-600">
-                UX/UI Design - July 5, 2019
-              </span>
-            </div>
-          </div>
-          <div class="flex flex-col space-y-4">
-            <div class="overflow-hidden">
-              <img
-                src="https://unsplash.com/photos/v9vII5gV8Lw/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
-                alt="work's image"
+                :src="item.image?.href"
+                :alt="item.image?.alt"
                 class="w-full object-contain" />
             </div>
             <div class="flex flex-col space-y-2">
               <a class="font-medium text-slate-600">
-                SCTHON Event Brand Identity
+                {{ item.title }}
               </a>
               <span class="text-sm font-light text-slate-600">
-                Graphic Design - March 31, 2019
-              </span>
-            </div>
-          </div>
-          <div class="flex flex-col space-y-4">
-            <div class="overflow-hidden">
-              <img
-                src="https://unsplash.com/photos/CGpifH3FjOA/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8Z3JhcGhpYyUyMGRlc2lnbnxlc3wwfHx8fDE2NTE3NDc2Njc&w=640"
-                alt="work's image"
-                class="w-full object-contain" />
-            </div>
-            <div class="flex flex-col space-y-2">
-              <a class="font-medium text-slate-600"> Dzord Brand Identity</a>
-              <span class="text-sm font-light text-slate-600">
-                Graphic Design - April 4, 2016
+                {{ item.summary }} — {{ getDisplayableDate(item.timestamp) }}
               </span>
             </div>
           </div>
         </div>
         <span class="uppercase font-bold text-slate-600 block">
-          Show all (12)
+          Show all ({{ user.projects.length }})
         </span>
       </div>
-      <div class="p-8 bg-white space-y-4">
+      <div v-if="Array.isArray(user.experience)" class="p-8 bg-white space-y-4">
         <span class="text-xl font-semibold block">Experience</span>
-        <div>
-          <div class="flex space-x-4">
+        <div class="space-y-4">
+          <div
+            v-for="item in user.experience"
+            :key="item.id"
+            class="flex space-x-4">
             <Avatar
               class="avatar-contain flex-shrink-0 !h-16 !w-16"
-              image="https://unsplash.com/photos/gcsNOsPEXfs/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjUzNjM1MTI3&w=640"
+              :image="item.image?.href"
               shape="circle" />
             <div class="flex flex-col w-full">
-              <span class="p-2 text-base font-medium text-slate-900"
-                >Freelance UX/UI Designer</span
-              >
-              <div class="spacey-2">
-                <span class="p-2 text-sm text-slate-800">Self-employed</span>
-                <span class="p-2 text-sm font-light text-slate-600"
-                  >Around the world</span
-                >
+              <span class="font-medium text-slate-900">
+                {{ item.title }}
+              </span>
+              <div class="space-x-2">
+                <span class="text-sm text-slate-800">{{ item.company }}</span>
+                <span class="text-sm font-light text-slate-600">
+                  {{ item.location }}
+                </span>
               </div>
-              <div class="spacey-2">
-                <span class="p-2 text-xs font-light text-slate-800"
-                  >Jun 2016 — Present</span
-                >
-                <span class="p-2 text-xs font-semibold text-slate-600"
-                  >5 years 10 months</span
-                >
+              <div class="space-x-2">
+                <span class="text-xs font-light text-slate-800">
+                  {{ getDisplayableExpDates(item.startDate, item.endDate) }}
+                </span>
+                <span class="text-xs font-semibold text-slate-600">
+                  {{ item.timeDiff }}
+                </span>
               </div>
-              <p class="p-2 text-sm text-slate-900">
-                Work with clients and studios as freelancer. Work in areas like:
-                e-commerce web projects; creative landing pages; Android and iOS
-                apps; corporate web sites and corporate identity.
-              </p>
-            </div>
-          </div>
-          <div class="flex space-x-4">
-            <Avatar
-              class="avatar-contain flex-shrink-0 !h-16 !w-16"
-              image="https://unsplash.com/photos/hhUx08PuYpc/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MTB8fHN0dWR5fGVzfDB8fHx8MTY1MzU4MzI1Nw&w=640"
-              shape="circle" />
-            <div class="flex flex-col w-full">
-              <span class="p-2 text-base font-medium text-slate-900"
-                >UX/UI designer</span
-              >
-              <div class="spacey-2">
-                <span class="p-2 text-sm text-slate-800">Upwork</span>
-                <span class="p-2 text-sm font-light text-slate-600"
-                  >United States</span
-                >
-              </div>
-              <div class="spacey-2">
-                <span class="p-2 text-xs font-light text-slate-800"
-                  >April 2015 — Aug 2016</span
-                >
-                <span class="p-2 text-xs font-semibold text-slate-600"
-                  >2 years 4 months</span
-                >
-              </div>
-              <p class="p-2 text-sm text-slate-900">
-                New experience with Upwork system. Work in areas like: UX/UI
-                design, graphic design, interaction design, UX research.
+              <p class="text-sm text-slate-900">
+                {{ item.description }}
               </p>
             </div>
           </div>
         </div>
       </div>
-      <div class="p-8 bg-white space-y-4">
+      <div v-if="Array.isArray(user.education)" class="p-8 bg-white space-y-4">
         <span class="text-xl font-semibold block">Education</span>
-        <div>
-          <div class="flex space-x-4">
+        <div class="space-y-4">
+          <div
+            v-for="item in user.education"
+            :key="item.id"
+            class="flex space-x-4">
             <Avatar
               class="avatar-contain flex-shrink-0 !h-16 !w-16"
-              image="https://unsplash.com/photos/QJDzYT_K8Xg/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MXx8c3R1ZHl8ZXN8MHx8fHwxNjUzNTgzMjU3&w=640"
+              :image="item.image?.href"
               shape="circle" />
             <div class="flex flex-col w-full">
-              <span class="p-2 text-base font-medium text-slate-900"
-                >University of Arizona</span
-              >
-              <span class="p-2 text-xs font-light">2009 - 2013</span>
-              <p class="p-2 text-sm text-slate-900">
-                Bachelor's degree in Computer and Information Systems and
-                Security/Information Assurance
+              <span class="text-base font-medium text-slate-900">
+                {{ item.university }}
+              </span>
+              <span class="text-xs font-light">
+                {{ item.startYear }} — {{ item.endYear }}
+              </span>
+              <p class="text-sm text-slate-900">
+                {{ item.description }}
               </p>
             </div>
           </div>
