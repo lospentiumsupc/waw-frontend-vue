@@ -389,17 +389,14 @@ export default {
       this.deleteJobOfferDialog = true;
     },
     deleteJobOffer() {
-      this.jobOffersService.delete(this.jobOffer.id).then(response => {
-        this.jobOffers = this.jobOffers.filter(t => t.id !== this.jobOffer.id);
-        this.deleteJobOfferDialog = false;
-        this.jobOffer = {};
-        this.$toast.add({
-          severity: "success",
-          summary: "Successful",
-          detail: "Job offer Deleted",
-          life: 3000,
-        });
-        console.log(response);
+      this.jobOffer = this.jobOffer.filter(v => v.id !== this.jobOffer.id);
+      this.deleteJobOffersDialog = false;
+      this.jobOffer = {};
+      this.$toast.add({
+        severity: "success",
+        summary: "Successful",
+        detail: "Job offer Deleted",
+        life: 3000,
       });
     },
     exportToCSV() {
