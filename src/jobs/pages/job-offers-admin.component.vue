@@ -1,4 +1,6 @@
 <script setup>
+import { JobsService } from "../services/jobs.service";
+import { FilterMatchMode, PrimeIcons } from "primevue/api";
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
@@ -17,13 +19,13 @@ import Dialog from "primevue/dialog";
         <template #start>
           <Button
             label="New"
-            icon="pi pi-plus"
+            :icon="PrimeIcons.PLUS"
             class="p-button-success mr-2"
             @click="openNew" />
 
           <Button
             label="Delete"
-            icon="pi pi-trash"
+            :icon="PrimeIcons.TRASH"
             class="p-button-danger"
             :disabled="!selectedJobOffers || !selectedJobOffers.length"
             @click="confirmDeleteSelected" />
@@ -32,7 +34,7 @@ import Dialog from "primevue/dialog";
         <template #end>
           <Button
             label="Export"
-            icon="pi pi-upload"
+            :icon="PrimeIcons.UPLOAD"
             class="p-button-help"
             @click="exportToCSV($event)" />
         </template>
@@ -57,7 +59,7 @@ import Dialog from "primevue/dialog";
               Job offers administrator
             </h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left"
-              ><i class="pi pi-search" />
+              ><i :class="PrimeIcons.SEARCH" />
               <InputText
                 v-model="filters['global'].value"
                 placeholder="Search..." />
@@ -65,57 +67,48 @@ import Dialog from "primevue/dialog";
           </div>
         </template>
 
-        <Column
-          selection-mode="multiple"
-          :style="{ width: `3rem` }"
-          :exportable="false">
+        <Column selection-mode="multiple" :exportable="false" class="w-12">
         </Column>
         <Column
           field="id"
           header="Id"
           :sortable="true"
-          :style="{ minWidth: `12rem` }"
-          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200"></Column>
+          class="px-6 py-3 text-xs w-48"></Column>
 
         <Column
           field="title"
           header="Title"
           :sortable="true"
-          :style="{ minWidth: `16rem` }"
-          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200">
+          class="px-6 py-3 text-xs w-48">
         </Column>
         <Column
           header="Image"
           field="image"
-          header-style="width:14%; min-width:10rem;"
-          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200">
+          header-class="w-40"
+          class="px-6 py-3 text-xs">
           <template #body="slotProps">
             <img
               :src="slotProps.data.image"
               :alt="slotProps.data.image"
-              class="shadow-2"
-              width="100" />
+              class="shadow-2 w-full" />
           </template>
         </Column>
         <Column
           field="description"
           header="Description"
           :sortable="true"
-          :style="{ minWidth: `16rem` }"
-          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200"></Column>
+          class="px-6 py-3 text-xs w-64"></Column>
         <Column
           field="salaryRange"
           header="Salary Range"
           :sortable="true"
-          :style="{ minWidth: `16rem` }"
-          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200">
+          class="px-6 py-3 text-xs w-64">
         </Column>
         <Column
           field="status"
           header="Status"
           :sortable="true"
-          :style="{ minWidth: `12rem` }"
-          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase bg-gray-100 border-b border-gray-200">
+          class="px-6 py-3 text-xs w-48">
           <template #body="slotProps">
             <Tag
               v-if="slotProps.data.status === 'Published'"
@@ -126,14 +119,14 @@ import Dialog from "primevue/dialog";
           </template>
         </Column>
 
-        <Column :exportable="false" :style="{ minWidth: `8rem` }">
+        <Column :exportable="false" class="w-32">
           <template #body="slotProps">
             <Button
-              icon="pi pi-pencil"
+              :icon="PrimeIcons.PENCIL"
               class="p-button-text p-button-rounded"
               @click="editJobOffer(slotProps.data)" />
             <Button
-              icon="pi pi-trash"
+              :icon="PrimeIcons.TRASH"
               class="p-button-text p-button-rounded"
               @click="confirmDeleteJobOffer(slotProps.data)" />
           </template>
@@ -145,8 +138,7 @@ import Dialog from "primevue/dialog";
       v-model:visible="jobOfferDialog"
       header="job offer Information"
       :modal="true"
-      class="p-fluid"
-      :style="{ width: `450px` }">
+      class="p-fluid mx-4 w-full sm:w-1/2">
       <div class="field">
         <span class="p-float-label">
           <InputText
@@ -208,12 +200,12 @@ import Dialog from "primevue/dialog";
       <template #footer>
         <Button
           label="Cancel"
-          icon="pi pi-times"
+          :icon="PrimeIcons.TIMES"
           class="p-button-text"
           @click="hideDialog" />
         <Button
           label="Save"
-          icon="pi pi-check"
+          :icon="PrimeIcons.CHECK"
           class="p-button-text"
           @click="saveJobOffer" />
       </template>
@@ -221,26 +213,25 @@ import Dialog from "primevue/dialog";
 
     <Dialog
       v-model:visible="deleteJobOfferDialog"
-      :style="{ width: `450px` }"
+      class="p-fluid mx-4 w-full sm:w-1/2"
       header="Confirm"
       :modal="true">
       <div class="confirmation-content">
-        <i
-          class="pi pi-exclamation-triangle mr-3"
-          :style="{ fontSize: `2rem` }" />
-        <span v-if="jobOffer"
-          >Are you sure you want to delete <b>{{ jobOffer.title }}</b></span
-        >
+        <i class="mr-3 text-3xl" :class="PrimeIcons.EXCLAMATION_TRIANGLE" />
+        <span v-if="jobOffer">
+          Are you sure you want to delete
+          <span class="font-medium">{{ jobOffer.title }}</span>
+        </span>
       </div>
       <template #footer>
         <Button
           label="No"
-          icon="pi pi-times"
+          :icon="PrimeIcons.TIMES"
           class="p-button-text"
           @click="deleteJobOfferDialog = false" />
         <Button
           label="Yes"
-          icon="pi pi-check"
+          :icon="PrimeIcons.CHECK"
           class="p-button-text"
           @click="deleteJobOffer" />
       </template>
@@ -248,26 +239,24 @@ import Dialog from "primevue/dialog";
 
     <Dialog
       v-model:visible="deleteJobOffersDialog"
-      :style="{ width: `450px` }"
+      class="p-fluid mx-4 w-full sm:w-1/2"
       header="Confirm"
       :modal="true">
       <div class="confirmation-content">
-        <i
-          class="pi pi-exclamation-triangle mr-3"
-          :style="{ fontSize: `2rem` }" />
-        <span v-if="jobOffer"
-          >Are you sure you want to delete the selected job offers?</span
-        >
+        <i class="mr-3 text-3xl" :class="PrimeIcons.EXCLAMATION_TRIANGLE" />
+        <span v-if="jobOffer">
+          Are you sure you want to delete the selected job offers?
+        </span>
       </div>
       <template #footer>
         <Button
           label="No"
-          icon="pi pi-times"
+          :icon="PrimeIcons.TIMES"
           class="p-button-text"
           @click="deleteJobOffersDialog = false" />
         <Button
           label="Yes"
-          icon="pi pi-check"
+          :icon="PrimeIcons.CHECK"
           class="p-button-text"
           @click="deleteSelectedJobOffers" />
       </template>
@@ -276,9 +265,6 @@ import Dialog from "primevue/dialog";
 </template>
 
 <script>
-import { JobsService } from "../services/jobs.service";
-import { FilterMatchMode } from "primevue/api";
-
 export default {
   name: "JobOfferList",
   data() {
