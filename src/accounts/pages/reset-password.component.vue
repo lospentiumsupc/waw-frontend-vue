@@ -1,5 +1,7 @@
 <script setup>
 import InputText from "primevue/inputtext";
+import { ref } from "vue/dist/vue";
+const email = ref("");
 </script>
 
 <template>
