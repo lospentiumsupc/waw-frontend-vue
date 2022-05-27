@@ -47,6 +47,9 @@ import { PrimeIcons } from "primevue/api";
         :paginator="true"
         :rows="10"
         :filters="filters"
+        filter-display="menu"
+        :loading="loading"
+        :row-hover="true"
         paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         :rows-per-page-options="[10, 15, 20]"
         current-page-report-template="Showing {first} to {last} of {totalRecords} jobOffers"
@@ -134,6 +137,12 @@ import { PrimeIcons } from "primevue/api";
         </Column>
         <template #footer>
           In total there are {{ jobOffers ? jobOffers.length : 0 }} job offers.
+        </template>
+        <template #paginatorstart>
+          <Button
+            type="button"
+            :icon="PrimeIcons.REFRESH"
+            class="p-button-text" />
         </template>
       </DataTable>
     </div>
@@ -284,6 +293,7 @@ export default {
       jobOffer: {},
       selectedJobOffers: null,
       filters: {},
+      loading: true,
       submitted: false,
       statuses: [
         { label: "Published", value: "published" },
