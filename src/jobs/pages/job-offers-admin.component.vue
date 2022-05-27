@@ -132,6 +132,9 @@ import { PrimeIcons } from "primevue/api";
               @click="confirmDeleteJobOffer(slotProps.data)" />
           </template>
         </Column>
+        <template #footer>
+          In total there are {{ jobOffers ? jobOffer.length : 0 }} job offers.
+        </template>
       </DataTable>
     </div>
 
