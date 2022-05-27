@@ -136,7 +136,8 @@ import { PrimeIcons } from "primevue/api";
           </template>
         </Column>
         <template #footer>
-          In total there are {{ jobOffers ? jobOffers.length : 0 }} job offers.
+          In total there are {{ jobOffers ? jobOffers.length : 0 }} job offers
+          registered in your account.
         </template>
         <template #paginatorstart>
           <Button
@@ -310,6 +311,7 @@ export default {
       this.jobOffers.forEach(jobOffer => this.getDisplayableJobOffer(jobOffer));
     });
     this.initFilters();
+    this.loading = false;
   },
   methods: {
     getDisplayableJobOffer(jobOffer) {
