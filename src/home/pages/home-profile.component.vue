@@ -2,22 +2,23 @@
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
 import { AuthenticationService } from "@/accounts/services/authentication.service";
-import { onBeforeMount, ref, watchEffect } from "vue";
+import { onBeforeMount, watchEffect } from "vue";
+import { $ref } from "vue/macros";
 import { useRouter } from "vue-router";
 
-const auth = ref(AuthenticationService.instance);
-const user = ref(auth.value.getCurrentUser());
+const auth = $ref(AuthenticationService.instance);
+let user = $ref(auth.getCurrentUser());
 
 const router = useRouter();
 
 onBeforeMount(() => {
-  if (!auth.value.loggedIn) {
+  if (!auth.loggedIn) {
     router.push("/account/signin");
   }
 });
 
 watchEffect(() => {
-  user.value = auth.value.getCurrentUser();
+  user = auth.getCurrentUser();
 });
 </script>
 <template>
