@@ -255,7 +255,7 @@ import Dialog from "primevue/dialog";
         <i
           class="pi pi-exclamation-triangle mr-3"
           :style="{ fontSize: `2rem` }" />
-        <span v-if="selectedJobOffers"
+        <span v-if="jobOffer"
           >Are you sure you want to delete the selected job offers?</span
         >
       </div>
@@ -389,7 +389,7 @@ export default {
       this.deleteJobOfferDialog = true;
     },
     deleteJobOffer() {
-      this.jobOffer = this.jobOffer.filter(v => v.id !== this.jobOffer.id);
+      this.jobOffers = this.jobOffers.filter(v => v.id !== this.jobOffer.id);
       this.deleteJobOffersDialog = false;
       this.jobOffer = {};
       this.$toast.add({
