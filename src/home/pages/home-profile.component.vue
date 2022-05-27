@@ -33,7 +33,7 @@ watchEffect(() => {
           <div class="px-8 pb-8 relative">
             <span class="h-32 w-48 block" />
             <Avatar
-              class="avatar-contain h-48 w-48 absolute inset-0 left-8 -top-16 border-8 border-white"
+              class="avatar-contain !h-48 !w-48 absolute inset-0 left-8 -top-16 border-8 border-white"
               image="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640"
               shape="circle" />
           </div>
