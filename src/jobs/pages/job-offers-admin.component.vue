@@ -309,9 +309,9 @@ export default {
       this.jobOffers = response.data;
       // eslint-disable-next-line array-callback-return
       this.jobOffers.forEach(jobOffer => this.getDisplayableJobOffer(jobOffer));
+      this.loading = false;
     });
     this.initFilters();
-    this.loading = false;
   },
   methods: {
     getDisplayableJobOffer(jobOffer) {
