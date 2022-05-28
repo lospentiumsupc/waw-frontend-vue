@@ -302,11 +302,11 @@ export default {
       deleteJobOfferDialog: false,
       deleteJobOffersDialog: false,
       jobOffer: {},
-      selectedJobOffers: null,
       filters: {
         title: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
       },
       loading: true,
+      selectedJobOffers: [],
       submitted: false,
       statuses: [
         { label: "Published", value: "published" },
@@ -440,7 +440,7 @@ export default {
         });
       });
       this.deleteJobOffersDialog = false;
-      this.selectedJobOffers = null;
+      this.selectedJobOffers = [];
       this.$toast.add({
         severity: "success",
         summary: "Successful",
