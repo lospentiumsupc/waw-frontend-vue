@@ -10,7 +10,6 @@ import TextArea from "primevue/textarea";
 import Dialog from "primevue/dialog";
 import { PrimeIcons } from "primevue/api";
 </script>
-
 <template>
   <div>
     <div class="job-offers-admin">
