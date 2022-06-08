@@ -80,11 +80,7 @@ import { PrimeIcons } from "primevue/api";
           :sortable="true"
           class="px-6 py-3 text-xs w-48"></Column>
 
-        <Column
-          field="title"
-          header="Title"
-          :sortable="true"
-          class="px-6 py-3 text-xs w-48">
+        <Column field="title" header="Title" class="px-6 py-3 text-xs w-48">
           <template #body="{ data }">
             {{ data.title }}
           </template>
