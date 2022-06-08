@@ -416,10 +416,9 @@ export default {
             });
             console.log(response);
           });
+          this.jobOfferDialog = false;
+          this.jobOffer = {};
         }
-
-      this.jobOfferDialog = false;
-      this.jobOffer = {};
     },
     editJobOffer(jobOffer) {
       this.jobOffer = { ...jobOffer };
