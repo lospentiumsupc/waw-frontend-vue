@@ -9,6 +9,8 @@ import Dropdown from "primevue/dropdown";
 import TextArea from "primevue/textarea";
 import Dialog from "primevue/dialog";
 import { PrimeIcons } from "primevue/api";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 </script>
 <template>
   <div>
@@ -307,7 +309,6 @@ import { PrimeIcons } from "primevue/api";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import { JobsService } from "@/jobs/services/jobs.service";
 import Tooltip from "primevue/tooltip";
-
 export default {
   name: "JobOfferList",
   directives: {
@@ -392,7 +393,7 @@ export default {
             .then(response => {
               this.jobOffers[this.findIndexById(response.data.id)] =
                 this.getDisplayableJobOffer(response.data);
-              this.$toast.add({
+              toast.add({
                 severity: "success",
                 summary: "Successful",
                 detail: "Job offer Updated",
@@ -408,7 +409,7 @@ export default {
           this.jobOffersService.create(this.jobOffer).then(response => {
             this.jobOffer = this.getDisplayableJobOffer(response.data);
             this.jobOffers.push(this.jobOffer);
-            this.$toast.add({
+            toast.add({
               severity: "success",
               summary: "Successful",
               detail: "Job offer Created",
