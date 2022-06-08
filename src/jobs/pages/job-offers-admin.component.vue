@@ -45,8 +45,9 @@ import { PrimeIcons } from "primevue/api";
         :value="jobOffers"
         data-key="id"
         :paginator="true"
+        show-gridlines
         :rows="10"
-        filter-display="row"
+        filter-display="menu"
         :loading="loading"
         :row-hover="true"
         :global-filter-fields="['title']"
@@ -64,7 +65,7 @@ import { PrimeIcons } from "primevue/api";
               ><i :class="PrimeIcons.SEARCH" />
               <InputText
                 v-model="filters['global'].value"
-                placeholder="Search..." />
+                placeholder="🔍 Search..." />
             </span>
           </div>
         </template>
@@ -84,14 +85,13 @@ import { PrimeIcons } from "primevue/api";
           header="Title"
           :sortable="true"
           class="px-6 py-3 text-xs w-48">
-          <template #filter="{ filterModel, filterCallback }">
+          <template #filter="{ filterModel }">
             <InputText
               v-model="filterModel.value"
               v-tooltip.top.focus="'Hit enter key to filter'"
               type="text"
               class="p-column-filter"
-              :placeholder="`Search by title - `"
-              @keydown.enter="filterCallback()" />
+              placeholder="Search by title - " />
           </template>
         </Column>
         <Column
@@ -305,9 +305,7 @@ export default {
       deleteJobOfferDialog: false,
       deleteJobOffersDialog: false,
       jobOffer: {},
-      filters: {
-        title: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-      },
+      filters: null,
       loading: true,
       selectedJobOffers: [],
       submitted: false,
