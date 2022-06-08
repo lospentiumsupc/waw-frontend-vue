@@ -85,9 +85,6 @@ import { PrimeIcons } from "primevue/api";
           header="Title"
           :sortable="true"
           class="px-6 py-3 text-xs w-48">
-          <template #body="{ data }">
-            {{ data.title }}
-          </template>
           <template #filter="{ filterModel }">
             <InputText
               v-model="filterModel.value"
