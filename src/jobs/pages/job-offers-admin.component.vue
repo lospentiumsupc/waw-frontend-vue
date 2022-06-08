@@ -91,6 +91,20 @@ import { PrimeIcons } from "primevue/api";
               class="p-column-filter"
               placeholder="Search by title - " />
           </template>
+          <template #filterclear="{ filterCallback }">
+            <Button
+              type="button"
+              icon="pi pi-times"
+              class="p-button-secondary"
+              @click="filterCallback()"></Button>
+          </template>
+          <template #filterapply="{ filterCallback }">
+            <Button
+              type="button"
+              icon="pi pi-check"
+              class="p-button-success"
+              @click="filterCallback()"></Button>
+          </template>
         </Column>
         <Column
           header="Image"
