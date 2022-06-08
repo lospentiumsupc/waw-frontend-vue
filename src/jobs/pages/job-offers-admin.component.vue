@@ -330,7 +330,7 @@ export default {
       ],
     };
   },
-  jobOffersService: null,
+  jobOffersService: [],
   created() {
     this.jobOffersService = new JobsService();
     this.jobOffersService.getAll().then(response => {
