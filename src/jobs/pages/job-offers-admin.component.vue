@@ -401,7 +401,7 @@ export default {
               console.log(response);
             });
         } else {
-          this.jobOffer.id = 0;
+          // this.jobOffer.id = 0;
           this.jobOffer = this.getStorableJobOffer(this.jobOffer);
           this.jobOffer.image =
             "https://unsplash.com/photos/T6fDN60bMWY/download?w=640";
