@@ -9,47 +9,6 @@ import Dropdown from "primevue/dropdown";
 import TextArea from "primevue/textarea";
 import Dialog from "primevue/dialog";
 import { PrimeIcons } from "primevue/api";
-import { useToast } from "primevue/usetoast";
-const toast = useToast();
-
-const saveJobOffer = () => {
-  this.submitted = true;
-  if (this.jobOffer.title.trim())
-    if (this.jobOffer.id) {
-      this.jobOffer = this.getStorableJobOffer(this.jobOffer);
-      this.jobOffersService
-        .update(this.jobOffer.id, this.jobOffer)
-        .then(response => {
-          this.jobOffers[this.findIndexById(response.data.id)] =
-            this.getDisplayableJobOffer(response.data);
-          toast.add({
-            severity: "success",
-            summary: "Successful",
-            detail: "Job offer Updated",
-            life: 3000,
-          });
-          console.log(response);
-        });
-    } else {
-      // this.jobOffer.id = 0;
-      this.jobOffer = this.getStorableJobOffer(this.jobOffer);
-      this.jobOffer.image =
-        "https://unsplash.com/photos/T6fDN60bMWY/download?w=640";
-      this.jobOffersService.create(this.jobOffer).then(response => {
-        this.jobOffer = this.getDisplayableJobOffer(response.data);
-        this.jobOffers.push(this.jobOffer);
-        toast.add({
-          severity: "success",
-          summary: "Successful",
-          detail: "Job offer Created",
-          life: 3000,
-        });
-        console.log(response);
-      });
-      this.jobOfferDialog = false;
-      this.jobOffer = {};
-    }
-};
 </script>
 <template>
   <div>
@@ -422,7 +381,45 @@ export default {
       this.jobOfferDialog = false;
       this.submitted = false;
     },
+    saveJobOffer() {
+      this.submitted = true;
+      if (this.jobOffer.title.trim())
+        if (this.jobOffer.id) {
+          this.jobOffer = this.getStorableJobOffer(this.jobOffer);
+          this.jobOffersService
+            .update(this.jobOffer.id, this.jobOffer)
+            .then(response => {
+              this.jobOffers[this.findIndexById(response.data.id)] =
+                this.getDisplayableJobOffer(response.data);
+              this.$toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Job offer Updated",
+                life: 3000,
+              });
+              console.log(response);
+            });
+        } else {
+          // this.jobOffer.id = 0;
+          this.jobOffer = this.getStorableJobOffer(this.jobOffer);
+          this.jobOffer.image =
+            "https://unsplash.com/photos/T6fDN60bMWY/download?w=640";
+          this.jobOffersService.create(this.jobOffer).then(response => {
+            this.jobOffer = this.getDisplayableJobOffer(response.data);
+            this.jobOffers.push(this.jobOffer);
+            this.$toast.add({
+              severity: "success",
+              summary: "Successful",
+              detail: "Job offer Created",
+              life: 3000,
+            });
+            console.log(response);
+          });
+        }
 
+      this.jobOfferDialog = false;
+      this.jobOffer = {};
+    },
     editJobOffer(jobOffer) {
       this.jobOffer = { ...jobOffer };
       this.jobOfferDialog = true;
