@@ -72,7 +72,10 @@ import { PrimeIcons } from "primevue/api";
         <template #empty> No offers found. </template>
         <template #loading> Loading offers data. Please wait. </template>
 
-        <Column selection-mode="multiple" :exportable="false" class="w-12">
+        <Column
+          selection-mode="multiple"
+          header-style="width: 3em"
+          :exportable="false">
         </Column>
         <Column
           field="id"
