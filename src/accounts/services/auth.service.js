@@ -1,6 +1,7 @@
 import { BaseService } from "@/core/services/base.service";
 import { http } from "@/core/services/http-common";
-import { reactive } from "vue";
+import { AuthServiceKey } from "@/core/utils/keys";
+import { inject, reactive } from "vue";
 
 export class AuthService extends BaseService {
   state = reactive({ user: null });
@@ -56,4 +57,9 @@ export class AuthService extends BaseService {
   }
 }
 
-export const GlobalAuthService = new AuthService();
+/**
+ * @returns {AuthService}
+ */
+export const useAuth = () => {
+  return inject(AuthServiceKey, null);
+};
