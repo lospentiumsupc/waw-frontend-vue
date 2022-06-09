@@ -2,9 +2,9 @@
 import InputText from "primevue/inputtext";
 import { ref } from "vue";
 import { useRouter, RouterLink } from "vue-router";
-import { useAuth } from "../services/auth.service";
+import { GlobalAuthService } from "../services/auth.service";
 
-const auth = useAuth();
+const auth = GlobalAuthService;
 const router = useRouter();
 
 const user = ref({
