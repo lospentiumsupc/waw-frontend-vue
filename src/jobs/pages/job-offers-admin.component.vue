@@ -53,7 +53,7 @@ import { PrimeIcons } from "primevue/api";
         :global-filter-fields="['title']"
         paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         :rows-per-page-options="[10, 15, 20]"
-        current-page-report-template="Showing {first} to {last} of {totalRecords} jobOffers"
+        current-page-report-template="Showing {first} to {last} of {totalRecords} job offers"
         responsive-layout="scroll">
         <template #header>
           <div
@@ -74,7 +74,7 @@ import { PrimeIcons } from "primevue/api";
 
         <Column
           selection-mode="multiple"
-          header-style="width: 3em"
+          header-class="w-12"
           :exportable="false">
         </Column>
         <Column
