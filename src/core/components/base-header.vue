@@ -5,13 +5,13 @@ import { PrimeIcons } from "primevue/api";
 import { useMq } from "vue3-mq";
 import { ref, watchEffect } from "vue";
 import { RouterLink, useRouter } from "vue-router";
-import { GlobalAuthService } from "@/accounts/services/auth.service";
+import { useAuth } from "@/accounts/services/auth.service";
 
 const mq = useMq();
 
 const router = useRouter();
 
-const auth = GlobalAuthService;
+const auth = useAuth();
 const user = ref(auth.user);
 
 watchEffect(() => {
