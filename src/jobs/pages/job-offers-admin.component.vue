@@ -61,11 +61,11 @@ import { PrimeIcons } from "primevue/api";
             <h5 class="mb-2 md:m-0 p-as-md-center text-xl">
               Job offers administrator
             </h5>
-            <span class="block mt-2 md:mt-0 p-input-icon-left"
+            <span class="p-input-icon-left"
               ><i :class="PrimeIcons.SEARCH" />
               <InputText
                 v-model="filters['global'].value"
-                placeholder="🔍 Search..." />
+                placeholder="Search..." />
             </span>
           </div>
         </template>
@@ -97,14 +97,14 @@ import { PrimeIcons } from "primevue/api";
           <template #filterclear="{ filterCallback }">
             <Button
               type="button"
-              icon="pi pi-times"
+              :icon="PrimeIcons.TIMES"
               class="p-button-secondary"
               @click="filterCallback()"></Button>
           </template>
           <template #filterapply="{ filterCallback }">
             <Button
               type="button"
-              icon="pi pi-check"
+              :icon="PrimeIcons.CHECK"
               class="p-button-success"
               @click="filterCallback()"></Button>
           </template>
