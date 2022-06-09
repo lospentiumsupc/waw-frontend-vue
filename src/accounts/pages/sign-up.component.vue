@@ -3,10 +3,10 @@ import InputText from "primevue/inputtext";
 import ToggleButton from "primevue/togglebutton";
 import { PrimeIcons } from "primevue/api";
 import { ref } from "vue";
-import { useAuth } from "../services/auth.service";
+import { GlobalAuthService } from "../services/auth.service";
 import { useRouter, RouterLink } from "vue-router";
 
-const auth = useAuth();
+const auth = GlobalAuthService;
 const router = useRouter();
 
 const user = ref({
