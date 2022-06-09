@@ -5,9 +5,10 @@ import PrimeVue from "primevue/config";
 import { Vue3Mq } from "vue3-mq";
 import ConfirmationService from "primevue/confirmationservice";
 import ToastService from "primevue/toastservice";
-import { AuthServiceKey } from "./core/utils/keys";
+import { AuthServiceKey, JobsServiceKey } from "./core/utils/keys";
 import { AuthService } from "./accounts/services/auth.service";
 import "@/assets/base.css";
+import { JobsService } from "./jobs/services/jobs.service";
 
 const app = createApp(App);
 
@@ -18,5 +19,6 @@ app.use(ConfirmationService);
 app.use(ToastService);
 
 app.provide(AuthServiceKey, new AuthService());
+app.provide(JobsServiceKey, new JobsService());
 
 app.mount("#app");

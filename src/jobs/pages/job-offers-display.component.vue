@@ -2,7 +2,7 @@
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
-import { JobsService } from "../services/jobs.service";
+import { useJobs } from "../services/jobs.service";
 import { ref, onMounted } from "vue";
 import { PrimeIcons } from "primevue/api";
 import ConfirmDialog from "primevue/confirmdialog";
@@ -10,7 +10,7 @@ import Toast from "primevue/toast";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
-const service = new JobsService();
+const service = useJobs();
 const jobs = ref([]);
 
 const confirm = useConfirm();
