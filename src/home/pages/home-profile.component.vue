@@ -1,12 +1,12 @@
 <script setup>
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
-import { useAuth } from "@/accounts/services/auth.service";
+import { GlobalAuthService } from "@/accounts/services/auth.service";
 import { onBeforeMount, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { toLocaleMonth } from "@/core/utils/months";
 
-const auth = useAuth();
+const auth = GlobalAuthService;
 const user = ref(auth.user);
 
 const router = useRouter();
