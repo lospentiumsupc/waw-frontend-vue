@@ -1,6 +1,4 @@
 <script setup>
-import { JobsService } from "../services/jobs.service";
-import { FilterMatchMode, PrimeIcons } from "primevue/api";
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
@@ -10,8 +8,8 @@ import Tag from "primevue/tag";
 import Dropdown from "primevue/dropdown";
 import TextArea from "primevue/textarea";
 import Dialog from "primevue/dialog";
+import { PrimeIcons } from "primevue/api";
 </script>
-
 <template>
   <div>
     <div class="job-offers-admin">
@@ -43,14 +41,19 @@ import Dialog from "primevue/dialog";
       <DataTable
         ref="dt"
         v-model:selection="selectedJobOffers"
+        v-model:filters="filters"
         :value="jobOffers"
         data-key="id"
         :paginator="true"
+        show-gridlines
         :rows="10"
-        :filters="filters"
+        filter-display="menu"
+        :loading="loading"
+        :row-hover="true"
+        :global-filter-fields="['title']"
         paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         :rows-per-page-options="[10, 15, 20]"
-        current-page-report-template="Showing {first} to {last} of {totalRecords} jobOffers"
+        current-page-report-template="Showing {first} to {last} of {totalRecords} job offers"
         responsive-layout="scroll">
         <template #header>
           <div
@@ -58,7 +61,7 @@ import Dialog from "primevue/dialog";
             <h5 class="mb-2 md:m-0 p-as-md-center text-xl">
               Job offers administrator
             </h5>
-            <span class="block mt-2 md:mt-0 p-input-icon-left"
+            <span class="p-input-icon-left"
               ><i :class="PrimeIcons.SEARCH" />
               <InputText
                 v-model="filters['global'].value"
@@ -66,8 +69,13 @@ import Dialog from "primevue/dialog";
             </span>
           </div>
         </template>
+        <template #empty> No offers found. </template>
+        <template #loading> Loading offers data. Please wait. </template>
 
-        <Column selection-mode="multiple" :exportable="false" class="w-12">
+        <Column
+          selection-mode="multiple"
+          header-class="w-12"
+          :exportable="false">
         </Column>
         <Column
           field="id"
@@ -75,11 +83,31 @@ import Dialog from "primevue/dialog";
           :sortable="true"
           class="px-6 py-3 text-xs w-48"></Column>
 
-        <Column
-          field="title"
-          header="Title"
-          :sortable="true"
-          class="px-6 py-3 text-xs w-48">
+        <Column field="title" header="Title" class="px-6 py-3 text-xs w-48">
+          <template #body="{ data }">
+            {{ data.title }}
+          </template>
+          <template #filter="{ filterModel }">
+            <InputText
+              v-model="filterModel.value"
+              type="text"
+              class="p-column-filter"
+              placeholder="Search by title - " />
+          </template>
+          <template #filterclear="{ filterCallback }">
+            <Button
+              type="button"
+              :icon="PrimeIcons.TIMES"
+              class="p-button-secondary"
+              @click="filterCallback()"></Button>
+          </template>
+          <template #filterapply="{ filterCallback }">
+            <Button
+              type="button"
+              :icon="PrimeIcons.CHECK"
+              class="p-button-success"
+              @click="filterCallback()"></Button>
+          </template>
         </Column>
         <Column
           header="Image"
@@ -131,6 +159,16 @@ import Dialog from "primevue/dialog";
               @click="confirmDeleteJobOffer(slotProps.data)" />
           </template>
         </Column>
+        <template #footer>
+          In total there are {{ jobOffers ? jobOffers.length : 0 }} job offers
+          registered in your account.
+        </template>
+        <template #paginatorstart>
+          <Button
+            type="button"
+            :icon="PrimeIcons.REFRESH"
+            class="p-button-text" />
+        </template>
       </DataTable>
     </div>
 
@@ -265,8 +303,15 @@ import Dialog from "primevue/dialog";
 </template>
 
 <script>
+// eslint-disable-next-line no-duplicate-imports
+import { FilterMatchMode, FilterOperator } from "primevue/api";
+import { JobsService } from "@/jobs/services/jobs.service";
+import Tooltip from "primevue/tooltip";
 export default {
   name: "JobOfferList",
+  directives: {
+    tooltip: Tooltip,
+  },
   data() {
     return {
       jobOffers: [],
@@ -274,8 +319,9 @@ export default {
       deleteJobOfferDialog: false,
       deleteJobOffersDialog: false,
       jobOffer: {},
-      selectedJobOffers: null,
-      filters: {},
+      filters: null,
+      loading: true,
+      selectedJobOffers: [],
       submitted: false,
       statuses: [
         { label: "Published", value: "published" },
@@ -283,13 +329,14 @@ export default {
       ],
     };
   },
-  jobOffersService: null,
+  jobOffersService: [],
   created() {
     this.jobOffersService = new JobsService();
     this.jobOffersService.getAll().then(response => {
       this.jobOffers = response.data;
       // eslint-disable-next-line array-callback-return
       this.jobOffers.forEach(jobOffer => this.getDisplayableJobOffer(jobOffer));
+      this.loading = false;
     });
     this.initFilters();
   },
@@ -313,8 +360,15 @@ export default {
     initFilters() {
       this.filters = {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        title: {
+          operator: FilterOperator.AND,
+          constraints: [
+            { value: null, matchMode: FilterMatchMode.STARTS_WITH },
+          ],
+        },
       };
     },
+
     findIndexById(id) {
       return this.jobOffer.findIndex(jobOffer => jobOffer.id === id);
     },
@@ -346,7 +400,7 @@ export default {
               console.log(response);
             });
         } else {
-          this.jobOffer.id = 0;
+          // this.jobOffer.id = 0;
           this.jobOffer = this.getStorableJobOffer(this.jobOffer);
           this.jobOffer.image =
             "https://unsplash.com/photos/T6fDN60bMWY/download?w=640";
@@ -401,7 +455,7 @@ export default {
         });
       });
       this.deleteJobOffersDialog = false;
-      this.selectedJobOffers = null;
+      this.selectedJobOffers = [];
       this.$toast.add({
         severity: "success",
         summary: "Successful",
