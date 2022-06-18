@@ -5,7 +5,6 @@
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
     "EditorConfig.EditorConfig",
-    "redhat.vscode-yaml",
     "bradlc.vscode-tailwindcss"
   ],
   "unwantedRecommendations": ["octref.vetur"]

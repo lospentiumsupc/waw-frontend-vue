@@ -1,33 +1,31 @@
-/* eslint-env node */
-
-module.exports = {
-  extends: [
+{
+  "extends": [
     "stylelint-config-standard",
     "stylelint-config-recommended-vue",
-    "stylelint-config-prettier",
+    "stylelint-config-prettier"
   ],
-  rules: {
+  "rules": {
     "at-rule-no-unknown": [
       true,
       {
-        ignoreAtRules: [
+        "ignoreAtRules": [
           "tailwind",
           "apply",
           "variants",
           "responsive",
           "screen",
           "layer",
-          "append",
-        ],
-      },
+          "append"
+        ]
+      }
     ],
     "function-no-unknown": [
       true,
       {
-        ignoreFunctions: ["theme"],
-      },
+        "ignoreFunctions": ["theme"]
+      }
     ],
-    "declaration-no-important": true,
+    "declaration-no-important": true
   },
-  ignoreFiles: ["node_modules/**/*.css", "src/**/*.js"],
-};
+  "ignoreFiles": ["node_modules/**/*.css", "src/**/*.js"]
+}
