@@ -3,7 +3,9 @@
   "files.insertFinalNewline": true,
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.prettier": true
+    "source.fixAll.eslint": true,
+    "source.fixAll.prettier": true,
+    "source.fixAll.stylelint": true
   },
   "editor.linkedEditing": true,
   "editor.suggest.preview": true,
@@ -14,9 +16,6 @@
   "eslint.validate": ["javascript", "vue"],
   "[html][vue][javascript][json][jsonc][css][markdown][yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "yaml.schemas": {
-    "https://json.schemastore.org/github-issue-config.json": ".github/ISSUE_TEMPLATE/config.yml"
   },
   "css.validate": false,
   "less.validate": false,
