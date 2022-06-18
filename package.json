@@ -9,16 +9,16 @@
     "preview": "vite preview --port 5050",
     "test": "concurrently -s -n test: 'npm:test:*'",
     "test:unit": "vitest --environment jsdom --run",
-    "lint": "concurrently -s --kill-others-on-fail -n lint: 'npm:lint:*(!fix)'",
-    "lint:js": "eslint . --ext .js,.vue --ignore-path .gitignore",
-    "lint:css": "stylelint --ignore-path .gitignore src/**/*.css src/**/*.vue",
+    "lint": "concurrently -s -n lint: 'npm:lint:*(!fix)'",
+    "lint:js": "eslint --cache --ext .js,.vue .",
+    "lint:css": "stylelint --cache src/**/*.css src/**/*.vue",
     "lint:md": "markdownlint-cli2 README.md \"**/*.md\" \".github/**/*.md\" \"#node_modules\"",
-    "lint:prettier": "prettier --check --ignore-path .gitignore .",
-    "lint:fix": "concurrently -s --kill-others-on-fail -n lint:fix: 'npm:lint:fix:*'",
-    "lint:fix:js": "eslint . --ext .js,.vue --ignore-path .gitignore --fix",
-    "lint:fix:css": "stylelint --ignore-path .gitignore src/**/*.css src/**/*.vue --fix",
+    "lint:prettier": "prettier --check .",
+    "lint:fix": "concurrently -s -n lint:fix: 'npm:lint:fix:*'",
+    "lint:fix:js": "eslint --cache --ext .js,.vue --fix .",
+    "lint:fix:css": "stylelint --cache --fix src/**/*.css src/**/*.vue",
     "lint:fix:md": "markdownlint-cli2-fix README.md \"**/*.md\" \".github/**/*.md\" \"#node_modules\"",
-    "lint:fix:prettier": "prettier --write --ignore-path .gitignore .",
+    "lint:fix:prettier": "prettier --write .",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -57,9 +57,9 @@
     "vitest": "^0.9.3"
   },
   "lint-staged": {
-    "*.{css,vue}": "stylelint --ignore-path .gitignore --fix",
-    "*.{js,vue}": "eslint --ignore-path .gitignore --cache --fix",
-    "*.{js,css,vue,md}": "prettier --ignore-path .gitignore --write",
+    "*.{css,vue}": "stylelint --cache --fix",
+    "*.{js,vue}": "eslint --cache --fix",
+    "*.{js,vue,html,css,md,json,yml}": "prettier --write",
     "*.md": "markdownlint-cli2-fix"
   }
 }
