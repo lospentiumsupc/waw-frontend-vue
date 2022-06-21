@@ -164,10 +164,12 @@ import { PrimeIcons } from "primevue/api";
           registered in your account.
         </template>
         <template #paginatorstart>
-          <Button
-            type="button"
-            :icon="PrimeIcons.REFRESH"
-            class="p-button-text" />
+          <RouterLink to="/jobs">
+            <Button
+              type="button"
+              :icon="PrimeIcons.REFRESH"
+              class="p-button-text" />
+          </RouterLink>
         </template>
       </DataTable>
     </div>
