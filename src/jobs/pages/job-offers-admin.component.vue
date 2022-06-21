@@ -354,6 +354,19 @@ export default {
     });
     this.initFilters();
   },
+  mounted() {
+    this.loading = true;
+
+    this.lazyParams = {
+      first: 0,
+      rows: this.$refs.dt.rows,
+      sortField: null,
+      sortOrder: null,
+      filters: this.filters,
+    };
+
+    this.loadLazyData();
+  },
   methods: {
     getDisplayableJobOffer(jobOffer) {
       jobOffer.status = jobOffer.published
