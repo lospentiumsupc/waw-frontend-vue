@@ -45,6 +45,7 @@ import { PrimeIcons } from "primevue/api";
         :value="jobOffers"
         data-key="id"
         :paginator="true"
+        :lazy="true"
         show-gridlines
         :rows="10"
         filter-display="menu"
@@ -54,7 +55,14 @@ import { PrimeIcons } from "primevue/api";
         paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         :rows-per-page-options="[10, 15, 20]"
         current-page-report-template="Showing {first} to {last} of {totalRecords} job offers"
-        responsive-layout="scroll">
+        responsive-layout="scroll"
+        :select-all="selectAll"
+        @page="onPage($event)"
+        @sort="onSort($event)"
+        @filter="onFilter($event)"
+        @select-all-change="onSelectAllChange"
+        @row-select="onRowSelect"
+        @row-unselect="onRowUnselect">
         <template #header>
           <div
             class="flex flex-column md:flex-row md:justify-between md:align-items-center">
