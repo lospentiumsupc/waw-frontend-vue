@@ -88,10 +88,15 @@ import { PrimeIcons } from "primevue/api";
         <Column
           field="id"
           header="Id"
+          :hidden="true"
           :sortable="true"
           class="px-6 py-3 text-xs w-48"></Column>
 
-        <Column field="title" header="Title" class="px-6 py-3 text-xs w-48">
+        <Column
+          ref="title"
+          field="title"
+          header="Title"
+          class="px-6 py-3 text-xs w-48">
           <template #body="{ data }">
             {{ data.title }}
           </template>
@@ -133,15 +138,17 @@ import { PrimeIcons } from "primevue/api";
         <Column
           field="description"
           header="Description"
-          :sortable="true"
+          :sortable="false"
           class="px-6 py-3 text-xs w-64"></Column>
         <Column
+          ref="salaryRange"
           field="salaryRange"
           header="Salary Range"
           :sortable="true"
           class="px-6 py-3 text-xs w-64">
         </Column>
         <Column
+          ref="status"
           field="status"
           header="Status"
           :sortable="true"
@@ -325,7 +332,7 @@ export default {
   data() {
     return {
       jobOffers: [],
-      totalRecords: 0,
+      totalRecords: 10,
       selectAll: false,
       jobOfferDialog: false,
       deleteJobOfferDialog: false,
@@ -333,7 +340,7 @@ export default {
       jobOffer: {},
       filters: null,
       loading: true,
-      selectedJobOffers: [],
+      selectedJobOffers: null,
       submitted: false,
       lazyParams: {},
       statuses: [
@@ -342,7 +349,7 @@ export default {
       ],
     };
   },
-  jobOffersService: [],
+  jobOffersService: null,
   created() {
     this.jobOffersService = new JobsService();
     this.jobOffersService.getAll().then(response => {
