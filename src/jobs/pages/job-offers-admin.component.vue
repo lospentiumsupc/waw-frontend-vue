@@ -490,6 +490,50 @@ export default {
         life: 3000,
       });
     },
+    loadLazyData() {
+      this.loading = true;
+
+      setTimeout(() => {
+        this.jobOffersService
+          .getAll({ lazyEvent: JSON.stringify(this.lazyParams) })
+          .then(data => {
+            this.jobOffers = data.data.jobOffers;
+            this.totalRecords = data.data.totalRecords;
+            this.loading = false;
+          });
+      }, Math.random() * 1000 + 250);
+    },
+    onPage(event) {
+      this.lazyParams = event;
+      this.loadLazyData();
+    },
+    onSort(event) {
+      this.lazyParams = event;
+      this.loadLazyData();
+    },
+    onFilter() {
+      this.lazyParams.filters = this.filters;
+      this.loadLazyData();
+    },
+    onSelectAllChange(event) {
+      const selectAll = event.checked;
+
+      if (selectAll) {
+        this.jobOffersService.getAll().then(data => {
+          this.selectAll = true;
+          this.selectedJobOffers = data.data.jobOffers;
+        });
+      } else {
+        this.selectAll = false;
+        this.selectedJobOffers = [];
+      }
+    },
+    onRowSelect() {
+      this.selectAll = this.selectedJobOffers.length === this.totalRecords;
+    },
+    onRowUnselect() {
+      this.selectAll = false;
+    },
   },
 };
 </script>
