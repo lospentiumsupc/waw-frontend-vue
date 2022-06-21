@@ -77,8 +77,8 @@ import { PrimeIcons } from "primevue/api";
             </span>
           </div>
         </template>
-        <template #empty> No offers found. </template>
-        <template #loading> Loading offers data. Please wait. </template>
+        <template #empty> No offers found.</template>
+        <template #loading> Loading offers data. Please wait.</template>
 
         <Column
           selection-mode="multiple"
@@ -147,11 +147,9 @@ import { PrimeIcons } from "primevue/api";
           :sortable="true"
           class="px-6 py-3 text-xs w-48">
           <template #body="slotProps">
-            <Tag
-              v-if="slotProps.data.status === 'Published'"
-              severity="success"
-              >{{ slotProps.data.status }}</Tag
-            >
+            <Tag v-if="slotProps.data.status === 'Published'" severity="success"
+              >{{ slotProps.data.status }}
+            </Tag>
             <Tag v-else severity="info">{{ slotProps.data.status }}</Tag>
           </template>
         </Column>
@@ -318,6 +316,7 @@ import { PrimeIcons } from "primevue/api";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import { JobsService } from "@/jobs/services/jobs.service";
 import Tooltip from "primevue/tooltip";
+
 export default {
   name: "JobOfferList",
   directives: {
