@@ -326,6 +326,8 @@ export default {
   data() {
     return {
       jobOffers: [],
+      totalRecords: 0,
+      selectAll: false,
       jobOfferDialog: false,
       deleteJobOfferDialog: false,
       deleteJobOffersDialog: false,
@@ -334,6 +336,7 @@ export default {
       loading: true,
       selectedJobOffers: [],
       submitted: false,
+      lazyParams: {},
       statuses: [
         { label: "Published", value: "published" },
         { label: "Unpublished", value: "unpublished" },
