@@ -95,12 +95,13 @@ import { PrimeIcons } from "primevue/api";
           <template #body="{ data }">
             {{ data.title }}
           </template>
-          <template #filter="{ filterModel }">
+          <template #filter="{ filterModel, filterCallback }">
             <InputText
               v-model="filterModel.value"
               type="text"
               class="p-column-filter"
-              placeholder="Search by title - " />
+              placeholder="Search by title - "
+              @keydown.enter="filterCallback()" />
           </template>
           <template #filterclear="{ filterCallback }">
             <Button
