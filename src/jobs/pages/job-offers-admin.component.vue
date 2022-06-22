@@ -332,7 +332,7 @@ export default {
   data() {
     return {
       jobOffers: [],
-      totalRecords: 10,
+      totalRecords: 0,
       selectAll: false,
       jobOfferDialog: false,
       deleteJobOfferDialog: false,
@@ -503,8 +503,8 @@ export default {
         this.jobOffersService
           .getAll({ lazyEvent: JSON.stringify(this.lazyParams) })
           .then(data => {
-            this.jobOffers = data.data.jobOffers;
-            this.totalRecords = data.data.totalRecords;
+            this.jobOffers = data.data;
+            this.totalRecords = data.data;
             this.loading = false;
           });
       }, Math.random() * 1000 + 250);
@@ -527,7 +527,7 @@ export default {
       if (selectAll) {
         this.jobOffersService.getAll().then(data => {
           this.selectAll = true;
-          this.selectedJobOffers = data.data.jobOffers;
+          this.selectedJobOffers = data.data;
         });
       } else {
         this.selectAll = false;
