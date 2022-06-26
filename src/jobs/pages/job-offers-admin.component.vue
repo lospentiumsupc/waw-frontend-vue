@@ -45,6 +45,7 @@ import { PrimeIcons } from "primevue/api";
         :value="jobOffers"
         data-key="id"
         :paginator="true"
+        :lazy="true"
         show-gridlines
         :rows="10"
         filter-display="menu"
@@ -54,7 +55,14 @@ import { PrimeIcons } from "primevue/api";
         paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         :rows-per-page-options="[10, 15, 20]"
         current-page-report-template="Showing {first} to {last} of {totalRecords} job offers"
-        responsive-layout="scroll">
+        responsive-layout="scroll"
+        :select-all="selectAll"
+        @page="onPage($event)"
+        @sort="onSort($event)"
+        @filter="onFilter($event)"
+        @select-all-change="onSelectAllChange"
+        @row-select="onRowSelect"
+        @row-unselect="onRowUnselect">
         <template #header>
           <div
             class="flex flex-column md:flex-row md:justify-between md:align-items-center">
@@ -69,8 +77,8 @@ import { PrimeIcons } from "primevue/api";
             </span>
           </div>
         </template>
-        <template #empty> No offers found. </template>
-        <template #loading> Loading offers data. Please wait. </template>
+        <template #empty> No offers found.</template>
+        <template #loading> Loading offers data. Please wait.</template>
 
         <Column
           selection-mode="multiple"
@@ -80,19 +88,25 @@ import { PrimeIcons } from "primevue/api";
         <Column
           field="id"
           header="Id"
+          :hidden="true"
           :sortable="true"
           class="px-6 py-3 text-xs w-48"></Column>
 
-        <Column field="title" header="Title" class="px-6 py-3 text-xs w-48">
+        <Column
+          ref="title"
+          field="title"
+          header="Title"
+          class="px-6 py-3 text-xs w-48">
           <template #body="{ data }">
             {{ data.title }}
           </template>
-          <template #filter="{ filterModel }">
+          <template #filter="{ filterModel, filterCallback }">
             <InputText
               v-model="filterModel.value"
               type="text"
               class="p-column-filter"
-              placeholder="Search by title - " />
+              placeholder="Search by title - "
+              @keydown.enter="filterCallback()" />
           </template>
           <template #filterclear="{ filterCallback }">
             <Button
@@ -124,25 +138,25 @@ import { PrimeIcons } from "primevue/api";
         <Column
           field="description"
           header="Description"
-          :sortable="true"
+          :sortable="false"
           class="px-6 py-3 text-xs w-64"></Column>
         <Column
+          ref="salaryRange"
           field="salaryRange"
           header="Salary Range"
           :sortable="true"
           class="px-6 py-3 text-xs w-64">
         </Column>
         <Column
+          ref="status"
           field="status"
           header="Status"
           :sortable="true"
           class="px-6 py-3 text-xs w-48">
           <template #body="slotProps">
-            <Tag
-              v-if="slotProps.data.status === 'Published'"
-              severity="success"
-              >{{ slotProps.data.status }}</Tag
-            >
+            <Tag v-if="slotProps.data.status === 'Published'" severity="success"
+              >{{ slotProps.data.status }}
+            </Tag>
             <Tag v-else severity="info">{{ slotProps.data.status }}</Tag>
           </template>
         </Column>
@@ -164,10 +178,12 @@ import { PrimeIcons } from "primevue/api";
           registered in your account.
         </template>
         <template #paginatorstart>
-          <Button
-            type="button"
-            :icon="PrimeIcons.REFRESH"
-            class="p-button-text" />
+          <RouterLink to="/jobs">
+            <Button
+              type="button"
+              :icon="PrimeIcons.REFRESH"
+              class="p-button-text" />
+          </RouterLink>
         </template>
       </DataTable>
     </div>
@@ -307,6 +323,7 @@ import { PrimeIcons } from "primevue/api";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import { JobsService } from "@/jobs/services/jobs.service";
 import Tooltip from "primevue/tooltip";
+
 export default {
   name: "JobOfferList",
   directives: {
@@ -315,21 +332,24 @@ export default {
   data() {
     return {
       jobOffers: [],
+      totalRecords: 0,
+      selectAll: false,
       jobOfferDialog: false,
       deleteJobOfferDialog: false,
       deleteJobOffersDialog: false,
       jobOffer: {},
       filters: null,
       loading: true,
-      selectedJobOffers: [],
+      selectedJobOffers: null,
       submitted: false,
+      lazyParams: {},
       statuses: [
         { label: "Published", value: "published" },
         { label: "Unpublished", value: "unpublished" },
       ],
     };
   },
-  jobOffersService: [],
+  jobOffersService: null,
   created() {
     this.jobOffersService = new JobsService();
     this.jobOffersService.getAll().then(response => {
@@ -339,6 +359,19 @@ export default {
       this.loading = false;
     });
     this.initFilters();
+  },
+  mounted() {
+    this.loading = true;
+
+    this.lazyParams = {
+      first: 0,
+      rows: this.$refs.dt.rows,
+      sortField: null,
+      sortOrder: null,
+      filters: this.filters,
+    };
+
+    this.loadLazyData();
   },
   methods: {
     getDisplayableJobOffer(jobOffer) {
@@ -462,6 +495,50 @@ export default {
         detail: "Job Offers Deleted",
         life: 3000,
       });
+    },
+    loadLazyData() {
+      this.loading = true;
+
+      setTimeout(() => {
+        this.jobOffersService
+          .getAll({ lazyEvent: JSON.stringify(this.lazyParams) })
+          .then(data => {
+            this.jobOffers = data.data;
+            this.totalRecords = data.data;
+            this.loading = false;
+          });
+      }, Math.random() * 1000 + 250);
+    },
+    onPage(event) {
+      this.lazyParams = event;
+      this.loadLazyData();
+    },
+    onSort(event) {
+      this.lazyParams = event;
+      this.loadLazyData();
+    },
+    onFilter() {
+      this.lazyParams.filters = this.filters;
+      this.loadLazyData();
+    },
+    onSelectAllChange(event) {
+      const selectAll = event.checked;
+
+      if (selectAll) {
+        this.jobOffersService.getAll().then(data => {
+          this.selectAll = true;
+          this.selectedJobOffers = data.data;
+        });
+      } else {
+        this.selectAll = false;
+        this.selectedJobOffers = [];
+      }
+    },
+    onRowSelect() {
+      this.selectAll = this.selectedJobOffers.length === this.totalRecords;
+    },
+    onRowUnselect() {
+      this.selectAll = false;
     },
   },
 };
