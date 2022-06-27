@@ -2,253 +2,374 @@
 import Toolbar from "primevue/toolbar";
 import Button from "primevue/button";
 import DataTable from "primevue/datatable";
-import InputText from "primevue/inputtext";
 import Column from "primevue/column";
 import Tag from "primevue/tag";
-import Dropdown from "primevue/dropdown";
+import InputText from "primevue/inputtext";
+import InputSwitch from "primevue/inputswitch";
 import TextArea from "primevue/textarea";
 import Dialog from "primevue/dialog";
-import { PrimeIcons } from "primevue/api";
+import Toast from "primevue/toast";
+import {
+  PrimeIcons,
+  FilterMatchMode,
+  FilterOperator,
+  ToastSeverity,
+} from "primevue/api";
+import { useToast } from "primevue/usetoast";
+import { onMounted, ref } from "vue";
+import { useJobs } from "@/jobs/services/jobs.service";
+
+const toastService = useToast();
+
+const jobsService = useJobs();
+const offers = ref([]);
+const loading = ref(false);
+
+/** @type {import("vue").Ref<import("primevue/datatable").default>} */
+const datatable = ref();
+/** @type {import("vue").Ref<any[]>} */
+const selection = ref();
+/** @type {import("vue").Ref<import("primevue/datatable").DataTableFilterMeta>} */
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  title: {
+    operator: FilterOperator.AND,
+    constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+  },
+});
+
+/** @type {import("vue").Ref<any>} */
+const currentOffer = ref(null);
+const dialogVisible = ref(false);
+const submitted = ref(false);
+
+const deleteDialogVisible = ref(false);
+/** @type {import("vue").Ref<any[]>} */
+const pendingDeletion = ref();
+
+const fetchData = async () => {
+  selection.value = null;
+  loading.value = true;
+  const res = await jobsService.getAll();
+  offers.value = res.data;
+  loading.value = false;
+};
+
+const isBlank = field => {
+  if (currentOffer.value === null) return false;
+  return submitted.value && !currentOffer.value[field];
+};
+
+const updateItem = item => {
+  currentOffer.value = { ...item };
+  dialogVisible.value = true;
+  submitted.value = false;
+};
+
+const createItem = () => updateItem({});
+
+const cancelDialog = () => {
+  currentOffer.value = null;
+  dialogVisible.value = false;
+};
+
+const submitItem = async item => {
+  const isUpdate = !!item.id;
+  const type = isUpdate ? "update" : "create";
+
+  submitted.value = true;
+
+  if (isBlank("title")) return;
+  if (isBlank("salaryRange")) return;
+
+  let res = null;
+
+  try {
+    if (isUpdate) {
+      res = await jobsService.update(item.id, item);
+      offers.value = offers.value.map(current => {
+        if (current.id === item.id) return res.data;
+        return current;
+      });
+    } else {
+      res = await jobsService.create(item);
+      offers.value.push(res.data);
+    }
+
+    toastService.add({
+      severity: ToastSeverity.SUCCESS,
+      summary: "Success",
+      detail: `Item ${type}d successfully`,
+      life: 3000,
+    });
+
+    cancelDialog();
+  } catch (err) {
+    toastService.add({
+      severity: ToastSeverity.ERROR,
+      summary: "Failed",
+      detail: `There was an error while trying to ${type} the item`,
+      life: 10000,
+    });
+  }
+};
+
+const cancelDelete = () => {
+  deleteDialogVisible.value = false;
+  pendingDeletion.value = null;
+};
+
+const confirmDelete = items => {
+  if (!Array.isArray(items)) {
+    return confirmDelete([items]);
+  }
+  deleteDialogVisible.value = true;
+  pendingDeletion.value = items;
+};
+
+const deleteItems = async () => {
+  try {
+    await Promise.all(
+      pendingDeletion.value.map(item => {
+        return jobsService.delete(item.id);
+      })
+    );
+    toastService.add({
+      severity: ToastSeverity.SUCCESS,
+      summary: "Success",
+      detail: "Items deleted successfully",
+      life: 3000,
+    });
+  } catch (err) {
+    toastService.add({
+      severity: ToastSeverity.ERROR,
+      summary: "Failed",
+      detail: "There was an error while trying to delete the items",
+      life: 10000,
+    });
+  }
+  await fetchData();
+  cancelDelete();
+};
+
+const exportCSV = () => datatable.value.exportCSV();
+
+onMounted(() => fetchData());
 </script>
+
 <template>
   <div>
-    <div class="job-offers-admin">
-      <Toolbar class="mb-4">
-        <template #start>
+    <Toolbar class="mb-4">
+      <template #start>
+        <div class="space-x-2">
           <Button
             label="New"
             :icon="PrimeIcons.PLUS"
-            class="p-button-success mr-2"
-            @click="openNew" />
-
+            class="p-button-success"
+            @click="createItem()" />
           <Button
             label="Delete"
             :icon="PrimeIcons.TRASH"
             class="p-button-danger"
-            :disabled="!selectedJobOffers || !selectedJobOffers.length"
-            @click="confirmDeleteSelected" />
-        </template>
+            :disabled="selection === null || selection?.length === 0"
+            @click="confirmDelete(selection)" />
+        </div>
+      </template>
 
-        <template #end>
-          <Button
-            label="Export"
-            :icon="PrimeIcons.UPLOAD"
-            class="p-button-help"
-            @click="exportToCSV($event)" />
-        </template>
-      </Toolbar>
+      <template #end>
+        <Button
+          label="Export"
+          :icon="PrimeIcons.UPLOAD"
+          class="p-button-help"
+          @click="exportCSV()" />
+      </template>
+    </Toolbar>
 
-      <DataTable
-        ref="dt"
-        v-model:selection="selectedJobOffers"
-        v-model:filters="filters"
-        :value="jobOffers"
-        data-key="id"
-        :paginator="true"
-        :lazy="true"
-        show-gridlines
-        :rows="10"
-        filter-display="menu"
-        :loading="loading"
-        :row-hover="true"
-        :global-filter-fields="['title']"
-        paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-        :rows-per-page-options="[10, 15, 20]"
-        current-page-report-template="Showing {first} to {last} of {totalRecords} job offers"
-        responsive-layout="scroll"
-        :select-all="selectAll"
-        @page="onPage($event)"
-        @sort="onSort($event)"
-        @filter="onFilter($event)"
-        @select-all-change="onSelectAllChange"
-        @row-select="onRowSelect"
-        @row-unselect="onRowUnselect">
-        <template #header>
-          <div
-            class="flex flex-column md:flex-row md:justify-between md:align-items-center">
-            <h5 class="mb-2 md:m-0 p-as-md-center text-xl">
-              Job offers administrator
-            </h5>
-            <span class="p-input-icon-left"
-              ><i :class="PrimeIcons.SEARCH" />
+    <DataTable
+      ref="datatable"
+      v-model:selection="selection"
+      v-model:filters="filters"
+      :global-filter-fields="['title']"
+      filter-display="menu"
+      :loading="loading"
+      data-key="id"
+      :value="offers"
+      :paginator="true"
+      paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+      :rows-per-page-options="[10, 15, 20]"
+      current-page-report-template="Showing {first} to {last} of {totalRecords} job offers"
+      responsive-layout="scroll"
+      :show-gridlines="true"
+      :row-hover="true"
+      :rows="10">
+      <template #header>
+        <div
+          class="flex flex-col md:flex-row md:justify-between md:items-center">
+          <h5 class="text-xl mb-2 md:mb-0 md:mr-2">Active offers</h5>
+          <div>
+            <span class="p-input-icon-left">
+              <i :class="PrimeIcons.SEARCH"></i>
               <InputText
                 v-model="filters['global'].value"
+                class="rounded"
+                type="text"
                 placeholder="Search..." />
             </span>
           </div>
-        </template>
-        <template #empty> No offers found.</template>
-        <template #loading> Loading offers data. Please wait.</template>
+        </div>
+      </template>
 
-        <Column
-          selection-mode="multiple"
-          header-class="w-12"
-          :exportable="false">
-        </Column>
-        <Column
-          field="id"
-          header="Id"
-          :hidden="true"
-          :sortable="true"
-          class="px-6 py-3 text-xs w-48"></Column>
+      <template #empty>No offers were found.</template>
 
-        <Column
-          ref="title"
-          field="title"
-          header="Title"
-          class="px-6 py-3 text-xs w-48">
-          <template #body="{ data }">
-            {{ data.title }}
-          </template>
-          <template #filter="{ filterModel, filterCallback }">
-            <InputText
-              v-model="filterModel.value"
-              type="text"
-              class="p-column-filter"
-              placeholder="Search by title - "
-              @keydown.enter="filterCallback()" />
-          </template>
-          <template #filterclear="{ filterCallback }">
-            <Button
-              type="button"
-              :icon="PrimeIcons.TIMES"
-              class="p-button-secondary"
-              @click="filterCallback()"></Button>
-          </template>
-          <template #filterapply="{ filterCallback }">
-            <Button
-              type="button"
-              :icon="PrimeIcons.CHECK"
-              class="p-button-success"
-              @click="filterCallback()"></Button>
-          </template>
-        </Column>
-        <Column
-          header="Image"
-          field="image"
-          header-class="w-40"
-          class="px-6 py-3 text-xs">
-          <template #body="slotProps">
-            <img
-              :src="slotProps.data.image"
-              :alt="slotProps.data.image"
-              class="shadow-2 w-full" />
-          </template>
-        </Column>
-        <Column
-          field="description"
-          header="Description"
-          :sortable="false"
-          class="px-6 py-3 text-xs w-64"></Column>
-        <Column
-          ref="salaryRange"
-          field="salaryRange"
-          header="Salary Range"
-          :sortable="true"
-          class="px-6 py-3 text-xs w-64">
-        </Column>
-        <Column
-          ref="status"
-          field="status"
-          header="Status"
-          :sortable="true"
-          class="px-6 py-3 text-xs w-48">
-          <template #body="slotProps">
-            <Tag v-if="slotProps.data.status === 'Published'" severity="success"
-              >{{ slotProps.data.status }}
-            </Tag>
-            <Tag v-else severity="info">{{ slotProps.data.status }}</Tag>
-          </template>
-        </Column>
+      <template #loading>Loading...</template>
 
-        <Column :exportable="false" class="w-32">
-          <template #body="slotProps">
-            <Button
-              :icon="PrimeIcons.PENCIL"
-              class="p-button-text p-button-rounded"
-              @click="editJobOffer(slotProps.data)" />
-            <Button
-              :icon="PrimeIcons.TRASH"
-              class="p-button-text p-button-rounded"
-              @click="confirmDeleteJobOffer(slotProps.data)" />
-          </template>
-        </Column>
-        <template #footer>
-          In total there are {{ jobOffers ? jobOffers.length : 0 }} job offers
-          registered in your account.
+      <Column
+        selection-mode="multiple"
+        header-class="w-12"
+        :exportable="false" />
+
+      <Column field="title" header="Title" class="px-6 py-3 text-xs w-48">
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText
+            v-model="filterModel.value"
+            type="text"
+            class="p-column-filter"
+            placeholder="Search by title"
+            @keydown.enter="filterCallback()" />
         </template>
-        <template #paginatorstart>
-          <RouterLink to="/jobs">
-            <Button
-              type="button"
-              :icon="PrimeIcons.REFRESH"
-              class="p-button-text" />
-          </RouterLink>
+        <template #filterclear="{ filterCallback }">
+          <Button
+            type="button"
+            :icon="PrimeIcons.TIMES"
+            class="p-button-secondary"
+            @click="filterCallback()" />
         </template>
-      </DataTable>
-    </div>
+        <template #filterapply="{ filterCallback }">
+          <Button
+            type="button"
+            :icon="PrimeIcons.CHECK"
+            class="p-button-success"
+            @click="filterCallback()" />
+        </template>
+      </Column>
+
+      <Column
+        field="image"
+        header="Image"
+        header-class="w-40"
+        class="px-6 py-3 text-xs">
+        <template #body="{ data }">
+          <img :src="data.image" class="w-full" />
+        </template>
+      </Column>
+
+      <Column
+        field="description"
+        header="Description"
+        :sortable="false"
+        class="px-6 py-3 text-xs w-64" />
+
+      <Column
+        ref="salaryRange"
+        field="salaryRange"
+        header="Salary Range"
+        :sortable="true"
+        class="px-6 py-3 text-xs w-64" />
+
+      <Column
+        field="published"
+        header="Status"
+        :sortable="true"
+        class="px-6 py-3 text-xs w-48">
+        <template #body="{ data }">
+          <Tag v-if="data.published" severity="success">Published</Tag>
+          <Tag v-else severity="info">Unpublished</Tag>
+        </template>
+      </Column>
+
+      <Column :exportable="false" class="w-32">
+        <template #body="{ data }">
+          <Button
+            :icon="PrimeIcons.PENCIL"
+            class="p-button-text p-button-rounded"
+            @click="updateItem(data)" />
+          <Button
+            :icon="PrimeIcons.TRASH"
+            class="p-button-text p-button-rounded"
+            @click="confirmDelete(data)" />
+        </template>
+      </Column>
+
+      <template #footer>
+        Found {{ offers.length ?? 0 }} offers in your account
+      </template>
+
+      <template #paginatorstart>
+        <Button
+          type="button"
+          :icon="PrimeIcons.REFRESH"
+          class="p-button-text"
+          @click="fetchData()" />
+      </template>
+    </DataTable>
 
     <Dialog
-      v-model:visible="jobOfferDialog"
-      header="job offer Information"
+      v-model:visible="dialogVisible"
+      header="Create new offer"
       :modal="true"
       class="p-fluid mx-4 w-full sm:w-1/2">
-      <div class="field">
-        <span class="p-float-label">
-          <InputText
-            id="title"
-            v-model.trim="jobOffer.title"
-            type="text"
-            required="true"
-            autofocus
-            :class="{ 'p-invalid': submitted && !jobOffer.title }" />
-          <label for="title">Title</label>
-          <small v-if="submitted && !jobOffer.title" class="p-error"
-            >Job offer title is required.</small
-          >
-        </span>
-      </div>
-      <div class="field">
-        <span class="p-float-label">
-          <TextArea
-            id="description"
-            v-model="jobOffer.description"
-            :required="false"
-            rows="2"
-            cols="2" />
-          <label for="description">Description</label>
-        </span>
-      </div>
-
-      <div class="field">
-        <span class="p-float-label">
-          <TextArea
-            id="salaryRange"
-            v-model="jobOffer.salaryRange"
-            :required="false"
-            rows="2"
-            cols="2" />
-          <label for="salaryRange">Salary Range</label>
-        </span>
-      </div>
-
-      <div class="field">
-        <Dropdown
-          id="published"
-          v-model="jobOffer.status"
-          :options="statuses"
-          option-label="label"
-          placeholder="Select an Status">
-          <template #value="slotProps">
-            <div v-if="slotProps.value && slotProps.value.value">
-              <span>{{ slotProps.value.label }}</span>
-            </div>
-            <div v-else-if="slotProps.value && !slotProps.value.value">
-              <span>{{ slotProps.value }}</span>
-            </div>
-            <span v-else>{{ slotProps.placeholder }}</span>
-          </template>
-        </Dropdown>
+      <div class="my-2">
+        <div>
+          <span class="p-float-label">
+            <InputText
+              id="dialog-title"
+              v-model.trim="currentOffer.title"
+              type="text"
+              required="true"
+              autofocus
+              class="rounded"
+              :class="{ 'p-invalid': isBlank('title') }" />
+            <label for="dialog-title">Title</label>
+          </span>
+          <small v-if="isBlank('title')" class="p-error">Required</small>
+        </div>
+        <div class="mt-4">
+          <span class="p-float-label">
+            <InputText
+              id="dialog-image-url"
+              v-model.trim="currentOffer.image"
+              type="text"
+              class="rounded" />
+            <label for="dialog-image-url">Image URL</label>
+          </span>
+        </div>
+        <div class="mt-4">
+          <span class="p-float-label">
+            <TextArea
+              id="dialog-description"
+              v-model.trim="currentOffer.description"
+              class="rounded"
+              rows="3" />
+            <label for="dialog-description">Description</label>
+          </span>
+        </div>
+        <div class="mt-2">
+          <span class="p-float-label">
+            <InputText
+              id="dialog-salary-range"
+              v-model.trim="currentOffer.salaryRange"
+              type="text"
+              required="true"
+              class="rounded"
+              :class="{ 'p-invalid': isBlank('salaryRange') }" />
+            <label for="dialog-salary-range">Salary Range</label>
+          </span>
+          <small v-if="isBlank('salaryRange')" class="p-error">Required</small>
+        </div>
+        <div class="mt-4">
+          <label class="mr-2" for="dialog-published">Published</label>
+          <InputSwitch id="dialog-published" v-model="currentOffer.published" />
+        </div>
       </div>
 
       <template #footer>
@@ -256,290 +377,48 @@ import { PrimeIcons } from "primevue/api";
           label="Cancel"
           :icon="PrimeIcons.TIMES"
           class="p-button-text"
-          @click="hideDialog" />
+          @click="cancelDialog()" />
         <Button
           label="Save"
           :icon="PrimeIcons.CHECK"
           class="p-button-text"
-          @click="saveJobOffer" />
+          @click="submitItem(currentOffer)" />
       </template>
     </Dialog>
 
     <Dialog
-      v-model:visible="deleteJobOfferDialog"
+      v-model:visible="deleteDialogVisible"
       class="p-fluid mx-4 w-full sm:w-1/2"
-      header="Confirm"
+      header="Delete"
       :modal="true">
-      <div class="confirmation-content">
-        <i class="mr-3 text-3xl" :class="PrimeIcons.EXCLAMATION_TRIANGLE" />
-        <span v-if="jobOffer">
+      <div class="flex items-center">
+        <i class="mr-3 text-3xl" :class="PrimeIcons.EXCLAMATION_TRIANGLE"></i>
+        <span>
           Are you sure you want to delete
-          <span class="font-medium">{{ jobOffer.title }}</span>
+          <span class="font-medium">
+            <template v-if="pendingDeletion.length === 1">
+              {{ pendingDeletion[0].title }}
+            </template>
+            <template v-else>{{ pendingDeletion.length }} items</template>
+          </span>
+          <span>?</span>
         </span>
       </div>
+
       <template #footer>
         <Button
-          label="No"
+          label="Cancel"
           :icon="PrimeIcons.TIMES"
-          class="p-button-text"
-          @click="deleteJobOfferDialog = false" />
+          class="p-button-info"
+          @click="cancelDelete()" />
         <Button
-          label="Yes"
-          :icon="PrimeIcons.CHECK"
-          class="p-button-text"
-          @click="deleteJobOffer" />
+          label="Delete"
+          :icon="PrimeIcons.TRASH"
+          class="p-button-danger"
+          @click="deleteItems()" />
       </template>
     </Dialog>
 
-    <Dialog
-      v-model:visible="deleteJobOffersDialog"
-      class="p-fluid mx-4 w-full sm:w-1/2"
-      header="Confirm"
-      :modal="true">
-      <div class="confirmation-content">
-        <i class="mr-3 text-3xl" :class="PrimeIcons.EXCLAMATION_TRIANGLE" />
-        <span v-if="jobOffer">
-          Are you sure you want to delete the selected job offers?
-        </span>
-      </div>
-      <template #footer>
-        <Button
-          label="No"
-          :icon="PrimeIcons.TIMES"
-          class="p-button-text"
-          @click="deleteJobOffersDialog = false" />
-        <Button
-          label="Yes"
-          :icon="PrimeIcons.CHECK"
-          class="p-button-text"
-          @click="deleteSelectedJobOffers" />
-      </template>
-    </Dialog>
+    <Toast />
   </div>
 </template>
-
-<script>
-// eslint-disable-next-line no-duplicate-imports
-import { FilterMatchMode, FilterOperator } from "primevue/api";
-import { JobsService } from "@/jobs/services/jobs.service";
-import Tooltip from "primevue/tooltip";
-
-export default {
-  name: "JobOfferList",
-  directives: {
-    tooltip: Tooltip,
-  },
-  data() {
-    return {
-      jobOffers: [],
-      totalRecords: 0,
-      selectAll: false,
-      jobOfferDialog: false,
-      deleteJobOfferDialog: false,
-      deleteJobOffersDialog: false,
-      jobOffer: {},
-      filters: null,
-      loading: true,
-      selectedJobOffers: null,
-      submitted: false,
-      lazyParams: {},
-      statuses: [
-        { label: "Published", value: "published" },
-        { label: "Unpublished", value: "unpublished" },
-      ],
-    };
-  },
-  jobOffersService: null,
-  created() {
-    this.jobOffersService = new JobsService();
-    this.jobOffersService.getAll().then(response => {
-      this.jobOffers = response.data;
-      // eslint-disable-next-line array-callback-return
-      this.jobOffers.forEach(jobOffer => this.getDisplayableJobOffer(jobOffer));
-      this.loading = false;
-    });
-    this.initFilters();
-  },
-  mounted() {
-    this.loading = true;
-
-    this.lazyParams = {
-      first: 0,
-      rows: this.$refs.dt.rows,
-      sortField: null,
-      sortOrder: null,
-      filters: this.filters,
-    };
-
-    this.loadLazyData();
-  },
-  methods: {
-    getDisplayableJobOffer(jobOffer) {
-      jobOffer.status = jobOffer.published
-        ? this.statuses[0].label
-        : this.statuses[1].label;
-      return jobOffer;
-    },
-    getStorableJobOffer(displayableJobOffer) {
-      return {
-        id: displayableJobOffer.id,
-        title: displayableJobOffer.title,
-        image: displayableJobOffer.image,
-        description: displayableJobOffer.description,
-        salaryRange: displayableJobOffer.salaryRange,
-        published: displayableJobOffer.status.label === "Published",
-      };
-    },
-    initFilters() {
-      this.filters = {
-        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        title: {
-          operator: FilterOperator.AND,
-          constraints: [
-            { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-          ],
-        },
-      };
-    },
-
-    findIndexById(id) {
-      return this.jobOffer.findIndex(jobOffer => jobOffer.id === id);
-    },
-    openNew() {
-      this.jobOffer = {};
-      this.submitted = false;
-      this.jobOfferDialog = true;
-    },
-    hideDialog() {
-      this.jobOfferDialog = false;
-      this.submitted = false;
-    },
-    saveJobOffer() {
-      this.submitted = true;
-      if (this.jobOffer.title.trim())
-        if (this.jobOffer.id) {
-          this.jobOffer = this.getStorableJobOffer(this.jobOffer);
-          this.jobOffersService
-            .update(this.jobOffer.id, this.jobOffer)
-            .then(response => {
-              this.jobOffers[this.findIndexById(response.data.id)] =
-                this.getDisplayableJobOffer(response.data);
-              this.$toast.add({
-                severity: "success",
-                summary: "Successful",
-                detail: "Job offer Updated",
-                life: 3000,
-              });
-              console.log(response);
-            });
-        } else {
-          // this.jobOffer.id = 0;
-          this.jobOffer = this.getStorableJobOffer(this.jobOffer);
-          this.jobOffer.image =
-            "https://unsplash.com/photos/T6fDN60bMWY/download?w=640";
-          this.jobOffersService.create(this.jobOffer).then(response => {
-            this.jobOffer = this.getDisplayableJobOffer(response.data);
-            this.jobOffers.push(this.jobOffer);
-            this.$toast.add({
-              severity: "success",
-              summary: "Successful",
-              detail: "Job offer Created",
-              life: 3000,
-            });
-            console.log(response);
-          });
-        }
-
-      this.jobOfferDialog = false;
-      this.jobOffer = {};
-    },
-    editJobOffer(jobOffer) {
-      this.jobOffer = { ...jobOffer };
-      this.jobOfferDialog = true;
-    },
-    confirmDeleteJobOffer(jobOffer) {
-      this.jobOffer = jobOffer;
-      this.deleteJobOfferDialog = true;
-    },
-    deleteJobOffer() {
-      this.jobOffers = this.jobOffers.filter(v => v.id !== this.jobOffer.id);
-      this.deleteJobOffersDialog = false;
-      this.jobOffer = {};
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Job offer Deleted",
-        life: 3000,
-      });
-    },
-    exportToCSV() {
-      this.$refs.dt.exportCSV();
-    },
-    confirmDeleteSelected() {
-      this.deleteJobOffersDialog = true;
-    },
-    deleteSelectedJobOffers() {
-      this.selectedJobOffers.forEach(jobOffer => {
-        this.jobOffersService.delete(jobOffer.id).then(response => {
-          this.jobOffers = this.jobOffers.filter(
-            t => t.id !== this.jobOffer.id
-          );
-          console.log(response);
-        });
-      });
-      this.deleteJobOffersDialog = false;
-      this.selectedJobOffers = [];
-      this.$toast.add({
-        severity: "success",
-        summary: "Successful",
-        detail: "Job Offers Deleted",
-        life: 3000,
-      });
-    },
-    loadLazyData() {
-      this.loading = true;
-
-      setTimeout(() => {
-        this.jobOffersService
-          .getAll({ lazyEvent: JSON.stringify(this.lazyParams) })
-          .then(data => {
-            this.jobOffers = data.data;
-            this.totalRecords = data.data;
-            this.loading = false;
-          });
-      }, Math.random() * 1000 + 250);
-    },
-    onPage(event) {
-      this.lazyParams = event;
-      this.loadLazyData();
-    },
-    onSort(event) {
-      this.lazyParams = event;
-      this.loadLazyData();
-    },
-    onFilter() {
-      this.lazyParams.filters = this.filters;
-      this.loadLazyData();
-    },
-    onSelectAllChange(event) {
-      const selectAll = event.checked;
-
-      if (selectAll) {
-        this.jobOffersService.getAll().then(data => {
-          this.selectAll = true;
-          this.selectedJobOffers = data.data;
-        });
-      } else {
-        this.selectAll = false;
-        this.selectedJobOffers = [];
-      }
-    },
-    onRowSelect() {
-      this.selectAll = this.selectedJobOffers.length === this.totalRecords;
-    },
-    onRowUnselect() {
-      this.selectAll = false;
-    },
-  },
-};
-</script>
