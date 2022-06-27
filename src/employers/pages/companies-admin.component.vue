@@ -25,7 +25,7 @@ onMounted(fetchData);
 
 const editCompany = item => {
   modalVisible.value = true;
-  currentCompany.value = item;
+  currentCompany.value = { ...item };
 };
 
 const create = () => editCompany({});
@@ -65,9 +65,9 @@ const deleteCompany = item => {
 </script>
 
 <template>
-  <Toolbar class="p-0 mb-1 flex flex-auto">
+  <Toolbar class="p-4 flex flex-auto">
     <template #start>
-      <h1 class="m-4">Associate Companies</h1>
+      <h1 class="text-xl font-semibold">Associate Companies</h1>
     </template>
     <template #end>
       <div class="space-x-1 mr-4">
@@ -80,14 +80,14 @@ const deleteCompany = item => {
       </div>
     </template>
   </Toolbar>
-  <div class="flex flex-wrap m-4">
-    <div v-for="company in companies" :key="company.id" class="w-1/2 p-4">
+  <div class="grid md:grid-cols-2 grid-cols-1 gap-4 mt-4">
+    <div v-for="company in companies" :key="company.id">
       <Card>
         <template #title>
-          <h1>{{ company.name }}</h1>
+          <h1 class="text-center">{{ company.name }}</h1>
         </template>
         <template #subtitle>
-          <h2>
+          <h2 class="text-center">
             {{ company.email }}
           </h2>
         </template>
@@ -97,14 +97,14 @@ const deleteCompany = item => {
           </h3>
         </template>
         <template #footer>
-          <div class="flex justify-end">
+          <div class="flex justify-end space-x-4">
             <Button
               :icon="PrimeIcons.PENCIL"
-              class="p-button-rounded mr-4"
+              class="p-button-info p-button-rounded"
               @click="editCompany(company)" />
 
             <Button
-              class="p-button-danger p-button-rounded mr-4"
+              class="p-button-danger p-button-rounded"
               :icon="PrimeIcons.TRASH"
               @click="deleteCompany(company)" />
           </div>
@@ -159,11 +159,3 @@ const deleteCompany = item => {
   </Dialog>
   <ConfirmDialog />
 </template>
-
-<style scoped>
-h1 {
-  font-size: x-large;
-  font-weight: 500;
-  text-align: center;
-}
-</style>
