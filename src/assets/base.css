@@ -9,12 +9,6 @@
   --font-family: theme("fontFamily.sans");
 }
 
-*,
-*::before,
-*::after {
-  @apply m-0 relative font-normal box-border;
-}
-
 body {
   @apply bg-slate-100 text-slate-900;
 
@@ -52,6 +46,10 @@ input:focus-visible {
 .p-inputtext,
 .p-terminal .p-terminal-input {
   @apply font-sans;
+}
+
+.p-checkbox-box ::before {
+  @apply box-content;
 }
 
 @tailwind utilities;
