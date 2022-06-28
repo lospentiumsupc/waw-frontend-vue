@@ -1,7 +1,9 @@
 <script setup>
+import Toast from "primevue/toast";
+import { RouterView } from "vue-router";
+
 import BaseHeader from "@/core/components/base-header.vue";
 import BaseFooter from "@/core/components/base-footer.vue";
-import { RouterView } from "vue-router";
 </script>
 
 <template>
@@ -10,4 +12,5 @@ import { RouterView } from "vue-router";
     <RouterView />
   </div>
   <BaseFooter />
+  <Toast />
 </template>

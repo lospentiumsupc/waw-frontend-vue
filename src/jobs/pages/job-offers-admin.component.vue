@@ -8,7 +8,6 @@ import InputText from "primevue/inputtext";
 import InputSwitch from "primevue/inputswitch";
 import TextArea from "primevue/textarea";
 import Dialog from "primevue/dialog";
-import Toast from "primevue/toast";
 import {
   PrimeIcons,
   FilterMatchMode,
@@ -418,7 +417,5 @@ onMounted(() => fetchData());
           @click="deleteItems()" />
       </template>
     </Dialog>
-
-    <Toast />
   </div>
 </template>

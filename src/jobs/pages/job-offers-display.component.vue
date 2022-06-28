@@ -6,7 +6,6 @@ import { useJobs } from "../services/jobs.service";
 import { ref, onMounted } from "vue";
 import { PrimeIcons } from "primevue/api";
 import ConfirmDialog from "primevue/confirmdialog";
-import Toast from "primevue/toast";
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 
@@ -48,7 +47,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Toast />
   <ConfirmDialog />
   <DataTable
     :value="jobs"
