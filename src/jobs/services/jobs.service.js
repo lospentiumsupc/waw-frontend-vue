@@ -5,7 +5,7 @@ import { inject } from "vue";
 
 export class JobsService extends BaseService {
   constructor() {
-    super("/jobs");
+    super("/offers");
   }
 
   /**
