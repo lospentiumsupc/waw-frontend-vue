@@ -1,9 +1,6 @@
 import { http } from "@/core/services/http-common";
 
 export class BaseService {
-  /** @type {string} */
-  endpoint = "";
-
   /**
    * @param {string} path
    */

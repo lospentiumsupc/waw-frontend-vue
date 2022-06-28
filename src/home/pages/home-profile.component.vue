@@ -1,13 +1,12 @@
 <script setup>
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
-import { GlobalAuthService } from "@/accounts/services/auth.service";
-import { onBeforeMount, ref, watchEffect } from "vue";
+import { useAuth } from "@/accounts/services/auth.service";
+import { onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 import { toLocaleMonth } from "@/core/utils/months";
 
-const auth = GlobalAuthService;
-const user = ref(auth.user);
+const auth = useAuth();
 
 const router = useRouter();
 
@@ -17,34 +16,35 @@ onBeforeMount(() => {
   }
 });
 
-watchEffect(() => {
-  user.value = auth.user;
-});
-
+/**
+ * @param {Date} date
+ */
 const getDisplayableDate = date => {
-  if (typeof date !== "number") {
+  if (!(date instanceof Date)) {
     throw new Error(`Invalid date, got ${typeof date}: ${date}`);
   }
 
-  const parsed = new Date(date);
   const month = toLocaleMonth(date, true);
-  const day = parsed.getDate();
-  const year = parsed.getFullYear();
+  const day = date.getDate();
+  const year = date.getFullYear();
   return `${month} ${day}, ${year}`;
 };
 
-const getDisplayableExpDates = (start, end) => {
-  if (typeof start !== "number") {
-    throw new Error(`Invalid start date, got ${typeof start}: ${start}`);
+/**
+ * @param {Date} startDate
+ * @param {Date} endDate
+ */
+const getDisplayableExpDates = (startDate, endDate) => {
+  if (!(startDate instanceof Date)) {
+    throw new Error(
+      `Invalid start date, got ${typeof startDate}: ${startDate}`
+    );
   }
 
   const msgs = { start: "", end: "Present" };
 
-  const startDate = new Date(start);
   msgs.start = `${toLocaleMonth(startDate)} ${startDate.getFullYear()}`;
-
-  if (typeof end !== "number") {
-    const endDate = new Date(end);
+  if (!(endDate instanceof Date)) {
     msgs.end = `${toLocaleMonth(endDate)} ${startDate.getFullYear()}`;
   }
 
@@ -58,47 +58,50 @@ const getDisplayableExpDates = (start, end) => {
         <div class="flex items-center w-full h-48 overflow-hidden">
           <img
             class="object-contain w-full"
-            src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=916" />
+            :src="auth.store.user.cover?.href"
+            :alt="auth.store.user.cover?.alt" />
         </div>
         <div class="flex">
           <div class="px-8 pb-8 relative">
             <span class="h-32 w-48 block" />
             <Avatar
               class="avatar-contain !h-48 !w-48 absolute inset-0 left-8 -top-16 border-8 border-white"
-              image="https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=640"
+              :image="auth.store.user.picture?.href"
               shape="circle" />
           </div>
           <div class="flex flex-col p-8 w-full space-y-2">
             <div class="flex justify-between w-full">
-              <span class="text-xl font-medium">{{ user.fullName }}</span>
+              <span class="text-xl font-medium">{{
+                auth.store.user.fullName
+              }}</span>
               <div class="text-sm text-slate-700 space-x-1 flex items-center">
                 <i :class="PrimeIcons.MAP_MARKER" class="text-sm"></i>
-                <span>{{ user.location }}</span>
+                <span>{{ auth.store.user.location }}</span>
               </div>
             </div>
             <p class="w-full text-slate-700">
-              {{ user.biography }}
+              {{ auth.store.user.biography }}
             </p>
           </div>
         </div>
       </div>
       <div class="p-8 bg-white space-y-4">
         <span class="text-xl font-semibold block">About</span>
-        <p class="text-lg text-slate-700">{{ user.about }}</p>
+        <p class="text-lg text-slate-700">{{ auth.store.user.about }}</p>
         <span class="uppercase font-bold text-slate-600 block">See more</span>
       </div>
       <div
-        v-if="Array.isArray(user.projects)"
+        v-if="Array.isArray(auth.store.projects)"
         class="p-8 rounded bg-white space-y-4">
         <div class="flex">
           <span class="text-xl font-semibold block mr-2">Projects</span>
           <span class="text-xl text-slate-500 block">
-            3 of {{ user.projects.length }}
+            3 of {{ auth.store.projects.length }}
           </span>
         </div>
         <div class="flex space-x-4">
           <div
-            v-for="item in user.projects"
+            v-for="item in auth.store.projects"
             :key="item.id"
             class="flex flex-col space-y-4">
             <div class="overflow-hidden">
@@ -112,20 +115,22 @@ const getDisplayableExpDates = (start, end) => {
                 {{ item.title }}
               </a>
               <span class="text-sm font-light text-slate-600">
-                {{ item.summary }} — {{ getDisplayableDate(item.timestamp) }}
+                {{ item.summary }} — {{ getDisplayableDate(item.date) }}
               </span>
             </div>
           </div>
         </div>
         <span class="uppercase font-bold text-slate-600 block">
-          Show all ({{ user.projects.length }})
+          Show all ({{ auth.store.projects.length }})
         </span>
       </div>
-      <div v-if="Array.isArray(user.experience)" class="p-8 bg-white space-y-4">
+      <div
+        v-if="Array.isArray(auth.store.experience)"
+        class="p-8 bg-white space-y-4">
         <span class="text-xl font-semibold block">Experience</span>
         <div class="space-y-4">
           <div
-            v-for="item in user.experience"
+            v-for="item in auth.store.experience"
             :key="item.id"
             class="flex space-x-4">
             <Avatar
@@ -137,7 +142,9 @@ const getDisplayableExpDates = (start, end) => {
                 {{ item.title }}
               </span>
               <div class="space-x-2">
-                <span class="text-sm text-slate-800">{{ item.company }}</span>
+                <span v-if="item.company" class="text-sm text-slate-800">
+                  {{ item.company.name }}
+                </span>
                 <span class="text-sm font-light text-slate-600">
                   {{ item.location }}
                 </span>
@@ -157,11 +164,13 @@ const getDisplayableExpDates = (start, end) => {
           </div>
         </div>
       </div>
-      <div v-if="Array.isArray(user.education)" class="p-8 bg-white space-y-4">
+      <div
+        v-if="Array.isArray(auth.store.education)"
+        class="p-8 bg-white space-y-4">
         <span class="text-xl font-semibold block">Education</span>
         <div class="space-y-4">
           <div
-            v-for="item in user.education"
+            v-for="item in auth.store.education"
             :key="item.id"
             class="flex space-x-4">
             <Avatar
