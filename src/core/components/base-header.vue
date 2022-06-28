@@ -62,6 +62,14 @@ const accountMenu = [
     visible: () => auth.loggedIn,
   },
   {
+    label: "Companies",
+    command: () => {
+      router.push("/companies/admin");
+    },
+    icon: PrimeIcons.BUILDING,
+    visible: () => auth.loggedIn,
+  },
+  {
     label: "Options",
     icon: PrimeIcons.COG,
     visible: () => auth.loggedIn,
