@@ -4,14 +4,16 @@ import Calendar from "primevue/calendar";
 import ToggleButton from "primevue/togglebutton";
 import useVuelidate from "@vuelidate/core";
 import { required, email, sameAs, helpers } from "@vuelidate/validators";
-import { PrimeIcons } from "primevue/api";
+import { PrimeIcons, ToastSeverity } from "primevue/api";
 import { reactive, computed, ref } from "vue";
 import { useRouter, RouterLink } from "vue-router";
+import { useToast } from "primevue/usetoast";
 
 import { useAuth } from "../services/auth.service";
 
 const auth = useAuth();
 const router = useRouter();
+const toastService = useToast();
 
 const submitted = ref(false);
 const state = reactive({
@@ -67,7 +69,24 @@ const handleRegister = async () => {
   delete user.confirmPassword;
   delete user.checked;
   const success = await auth.register(user);
-  if (success) router.push("/account/signin");
+  if (success) {
+    router.push("/account/signin");
+    // Registation complete
+    toastService.add({
+      severity: ToastSeverity.SUCCESS,
+      summary: "Registration success",
+      detail: "Registered successfully. Please login to access your account.",
+    });
+    return;
+  }
+
+  // Unable to complete registration
+  toastService.add({
+    severity: ToastSeverity.ERROR,
+    summary: "Registration failed",
+    detail:
+      "An error occurred while trying to register. Please try again later.",
+  });
 };
 </script>
 
