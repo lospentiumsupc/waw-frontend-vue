@@ -16,7 +16,6 @@ const companies = ref([]);
 const modalVisible = ref(false);
 const currentCompany = ref({});
 const confirm = useConfirm();
-const rating = ref();
 
 const fetchData = async () => {
   const response = await service.getAll();
@@ -100,7 +99,7 @@ const deleteCompany = item => {
         </template>
         <template #footer>
           <div class="flex justify-between space-x-4">
-            <Rating :model-value="rating" :stars="3" :cancel="false"></Rating>
+            <Rating v-model="company.rating" :cancel="false"></Rating>
             <div class="flex justify-end space-x-4">
               <Button
                 :icon="PrimeIcons.PENCIL"
