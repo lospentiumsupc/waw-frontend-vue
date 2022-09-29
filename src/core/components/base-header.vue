@@ -6,6 +6,7 @@ import { useMq } from "vue3-mq";
 import { ref, watchEffect } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { useAuth } from "@/accounts/services/auth.service";
+import ConfirmDialog from "primevue/confirmdialog";
 
 const mq = useMq();
 
@@ -72,6 +73,14 @@ const accountMenu = [
   {
     label: "Options",
     icon: PrimeIcons.COG,
+    visible: () => auth.loggedIn,
+  },
+  {
+    label: "Verify account",
+    command: () => {
+      // trigger the confirmDialog
+    },
+    icon: PrimeIcons.CHECK_CIRCLE,
     visible: () => auth.loggedIn,
   },
   {
@@ -147,6 +156,7 @@ const accountMenu = [
       <Menu ref="menuRef" :model="accountMenu" :popup="true" class="mt-2" />
     </div>
   </header>
+  <ConfirmDialog> </ConfirmDialog>
 </template>
 
 <style>
