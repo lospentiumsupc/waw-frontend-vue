@@ -9,12 +9,14 @@ import InputText from "primevue/inputtext";
 import Dialog from "primevue/dialog";
 import ConfirmDialog from "primevue/confirmdialog";
 import { useConfirm } from "primevue/useconfirm";
+import Rating from "primevue/rating";
 
 const service = new CompaniesService();
 const companies = ref([]);
 const modalVisible = ref(false);
 const currentCompany = ref({});
 const confirm = useConfirm();
+const rating = ref();
 
 const fetchData = async () => {
   const response = await service.getAll();
@@ -97,6 +99,10 @@ const deleteCompany = item => {
           </h3>
         </template>
         <template #footer>
+          <div class="flex justifty-start space-x-4">
+            <Rating :model-value="rating" :cancel="true"></Rating>
+            <span>Number of stars: {{ rating }}</span>
+          </div>
           <div class="flex justify-end space-x-4">
             <Button
               :icon="PrimeIcons.PENCIL"
