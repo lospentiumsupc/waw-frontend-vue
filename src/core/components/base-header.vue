@@ -24,7 +24,7 @@ const handleConfirmation = () => {
   confirm.require({
     header: "Account verification",
     message:
-      "Do you want your account to be verified by WAW? These action might take weeks and it's irreversible.",
+      "Do you want your account to be verified by WAW? Means you're one of our trustworthy users!",
     icon: PrimeIcons.EXCLAMATION_CIRCLE,
     accept: () => {
       toast.add({
@@ -37,7 +37,7 @@ const handleConfirmation = () => {
     },
     reject: () => {
       toast.add({
-        severity: "warn",
+        severity: "info",
         summary: "Verification cancelled",
         detail:
           "You have cancelled the verification of your account. You can do it again any time!",
