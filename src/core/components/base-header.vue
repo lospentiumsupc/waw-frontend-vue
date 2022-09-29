@@ -7,6 +7,8 @@ import { ref, watchEffect } from "vue";
 import { RouterLink, useRouter } from "vue-router";
 import { useAuth } from "@/accounts/services/auth.service";
 import ConfirmDialog from "primevue/confirmdialog";
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 
 const mq = useMq();
 
@@ -14,6 +16,37 @@ const router = useRouter();
 
 const auth = useAuth();
 const user = ref(auth.user);
+
+const confirm = useConfirm();
+const toast = useToast();
+
+const handleConfirmation = () => {
+  confirm.require({
+    header: "Account verification",
+    message:
+      "Do you want your account to be verified by WAW? These action might take weeks and it's irreversible.",
+    icon: PrimeIcons.EXCLAMATION_CIRCLE,
+    accept: () => {
+      toast.add({
+        severity: "success",
+        summary: "Verification requested",
+        detail:
+          "You are now under verification proccess. We'll get back to you by email soon!",
+        life: 3000,
+      });
+    },
+    reject: () => {
+      toast.add({
+        severity: "warn",
+        summary: "Verification cancelled",
+        detail:
+          "You have cancelled the verification of your account. You can do it again any time!",
+        life: 3000,
+      });
+      close();
+    },
+  });
+};
 
 watchEffect(() => {
   user.value = auth.user;
@@ -79,6 +112,7 @@ const accountMenu = [
     label: "Verify account",
     command: () => {
       // trigger the confirmDialog
+      handleConfirmation();
     },
     icon: PrimeIcons.CHECK_CIRCLE,
     visible: () => auth.loggedIn,
@@ -156,7 +190,7 @@ const accountMenu = [
       <Menu ref="menuRef" :model="accountMenu" :popup="true" class="mt-2" />
     </div>
   </header>
-  <ConfirmDialog> </ConfirmDialog>
+  <ConfirmDialog />
 </template>
 
 <style>
