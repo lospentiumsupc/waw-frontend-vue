@@ -99,20 +99,19 @@ const deleteCompany = item => {
           </h3>
         </template>
         <template #footer>
-          <div class="flex justifty-start space-x-4">
-            <Rating :model-value="rating" :cancel="true"></Rating>
-            <span>Number of stars: {{ rating }}</span>
-          </div>
-          <div class="flex justify-end space-x-4">
-            <Button
-              :icon="PrimeIcons.PENCIL"
-              class="p-button-info p-button-rounded"
-              @click="editCompany(company)" />
+          <div class="flex justify-between space-x-4">
+            <Rating :model-value="rating" :stars="3" :cancel="false"></Rating>
+            <div class="flex justify-end space-x-4">
+              <Button
+                :icon="PrimeIcons.PENCIL"
+                class="p-button-info p-button-rounded"
+                @click="editCompany(company)" />
 
-            <Button
-              class="p-button-danger p-button-rounded"
-              :icon="PrimeIcons.TRASH"
-              @click="deleteCompany(company)" />
+              <Button
+                class="p-button-danger p-button-rounded"
+                :icon="PrimeIcons.TRASH"
+                @click="deleteCompany(company)" />
+            </div>
           </div>
         </template>
       </Card>
