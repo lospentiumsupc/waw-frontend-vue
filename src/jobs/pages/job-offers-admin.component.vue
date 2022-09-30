@@ -46,6 +46,13 @@ const deleteDialogVisible = ref(false);
 /** @type {import("vue").Ref<any[]>} */
 const pendingDeletion = ref();
 
+const events = [
+  { status: "No applied", color: "#444" },
+  { status: "Applied", color: "#FFF" },
+  { status: "Accepted", color: "#FFF" },
+  { status: "Rejected", color: "#FFF" },
+];
+
 const fetchData = async () => {
   selection.value = null;
   loading.value = true;
@@ -275,6 +282,19 @@ onMounted(() => fetchData());
         :sortable="true"
         class="px-6 py-3 text-xs w-64" />
 
+      <Column field="progress" header="Progress" header-class="h-50">
+        <template #body>
+          <pv-timeline :value="events">
+            <template #marker="slotprops">
+              <span class="status-circle" style="background-color: #eee"></span>
+            </template>
+            <template #content="slotprops">
+              {{ slotprops.item.status }}
+            </template>
+          </pv-timeline>
+        </template>
+      </Column>
+
       <Column
         field="published"
         header="Status"
@@ -419,3 +439,12 @@ onMounted(() => fetchData());
     </Dialog>
   </div>
 </template>
+<style scoped>
+.status-circle {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #444;
+  border-radius: 50%;
+}
+</style>

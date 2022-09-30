@@ -20,6 +20,7 @@ const handleConfirmation = () => {
     message: "Are you sure you want to apply for this job?",
     icon: PrimeIcons.EXCLAMATION_TRIANGLE,
     accept: () => {
+      // TODO: agregar a la
       toast.add({
         severity: "success",
         summary: "Confirmed",
