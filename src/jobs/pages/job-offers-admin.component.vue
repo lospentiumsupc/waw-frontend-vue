@@ -284,14 +284,14 @@ onMounted(() => fetchData());
 
       <Column field="progress" header="Progress" header-class="h-50">
         <template #body>
-          <pv-timeline :value="events">
-            <template #marker="slotprops">
-              <span class="status-circle" style="background-color: #eee"></span>
+          <PvTimeline :value="events">
+            <template #marker>
+              <span class="status-circle"></span>
             </template>
             <template #content="slotprops">
               {{ slotprops.item.status }}
             </template>
-          </pv-timeline>
+          </PvTimeline>
         </template>
       </Column>
 
@@ -446,5 +446,6 @@ onMounted(() => fetchData());
   height: 20px;
   border: 1px solid #444;
   border-radius: 50%;
+  background-color: #eee;
 }
 </style>
