@@ -276,12 +276,12 @@ onMounted(() => fetchData());
         class="px-6 py-3 text-xs w-64" />
 
       <Column
-        field="published"
+        field="status"
         header="Status"
         :sortable="true"
         class="px-6 py-3 text-xs w-48">
         <template #body="{ data }">
-          <Tag v-if="data.published" severity="success">Published</Tag>
+          <Tag v-if="data.status" severity="success">Published</Tag>
           <Tag v-else severity="info">Unpublished</Tag>
         </template>
       </Column>
@@ -367,7 +367,7 @@ onMounted(() => fetchData());
         </div>
         <div class="mt-4">
           <label class="mr-2" for="dialog-published">Published</label>
-          <InputSwitch id="dialog-published" v-model="currentOffer.published" />
+          <InputSwitch id="dialog-published" v-model="currentOffer.status" />
         </div>
       </div>
 
