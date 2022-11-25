@@ -2,6 +2,7 @@
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
+import Timeline from "primevue/timeline";
 import { useJobs } from "../services/jobs.service";
 import { ref, onMounted } from "vue";
 import { PrimeIcons } from "primevue/api";
@@ -14,13 +15,20 @@ const jobs = ref([]);
 const confirm = useConfirm();
 const toast = useToast();
 
-const handleConfirmation = () => {
+const events = [
+  { status: "Not applied" },
+  { status: "Applied" },
+  { status: "Accepted" },
+  { status: "Rejected" },
+];
+
+const handleConfirmation = index => {
   confirm.require({
     header: "Confirmation",
     message: "Are you sure you want to apply for this job?",
     icon: PrimeIcons.EXCLAMATION_TRIANGLE,
     accept: () => {
-      // TODO: agregar a la
+      jobs.value[index].progress = "Applied";
       toast.add({
         severity: "success",
         summary: "Confirmed",
@@ -42,7 +50,9 @@ const handleConfirmation = () => {
 
 onMounted(async () => {
   const response = await service.getAll();
-  jobs.value = response.data;
+  jobs.value = response.data
+    .filter(i => i.status)
+    .map(i => ({ ...i, progress: "Not applied" }));
 });
 </script>
 
@@ -63,18 +73,53 @@ onMounted(async () => {
         <h2 class="mb-2 md:m-0 p-as-md-center text-xl">Available job offers</h2>
       </div>
     </template>
-    <Column field="id" header="ID" :sortable="true" />
-    <Column field="title" header="Title" :sortable="true" />
-    <Column field="description" header="Description" :sortable="true" />
-    <Column field="salaryRange" header="Salary Range" :sortable="true" />
-    <Column header="Action">
-      <template #body>
+    <Column field="id" header="ID" :sortable="true" class="px-6 py-3 text-xs" />
+    <Column
+      field="title"
+      header="Title"
+      :sortable="true"
+      class="px-6 py-3 text-xs" />
+    <Column
+      field="description"
+      header="Description"
+      :sortable="true"
+      class="px-6 py-3 text-xs" />
+    <Column
+      field="salaryRange"
+      header="Salary Range"
+      :sortable="true"
+      class="px-6 py-3 text-xs" />
+    <Column field="progress" header="Progress" class="px-6 py-3 text-xs">
+      <template #body="bodyprops">
+        <Timeline :value="events">
+          <template #marker="timelineprops">
+            <span
+              class="block w-5 h-5 bg-neutral-100 border border-stone-700"
+              :class="{
+                'bg-green-500':
+                  bodyprops.data.progress === timelineprops.item.status,
+              }"></span>
+          </template>
+          <template #content="props">
+            {{ props.item.status }}
+          </template>
+        </Timeline>
+      </template>
+    </Column>
+    <Column header="Action" class="px-6 py-3 text-xs">
+      <template #body="props">
         <Button
           label="Apply"
           class="p-button-primary p-button-text"
-          @click="handleConfirmation()">
+          @click="handleConfirmation(props.index)">
         </Button>
       </template>
     </Column>
   </DataTable>
 </template>
+
+<style>
+.p-timeline-event-opposite {
+  display: none;
+}
+</style>

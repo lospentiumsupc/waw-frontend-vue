@@ -8,7 +8,6 @@ import InputText from "primevue/inputtext";
 import InputSwitch from "primevue/inputswitch";
 import TextArea from "primevue/textarea";
 import Dialog from "primevue/dialog";
-import Timeline from "primevue/timeline";
 import {
   PrimeIcons,
   FilterMatchMode,
@@ -46,13 +45,6 @@ const submitted = ref(false);
 const deleteDialogVisible = ref(false);
 /** @type {import("vue").Ref<any[]>} */
 const pendingDeletion = ref();
-
-const events = [
-  { status: "Not applied", color: "#444" },
-  { status: "Applied", color: "#FFF" },
-  { status: "Accepted", color: "#FFF" },
-  { status: "Rejected", color: "#FFF" },
-];
 
 const fetchData = async () => {
   selection.value = null;
@@ -283,20 +275,6 @@ onMounted(() => fetchData());
         :sortable="true"
         class="px-6 py-3 text-xs w-64" />
 
-      <Column field="progress" header="Progress" class="px-6 py-3 text-xs w-48">
-        <template #body>
-          <Timeline :value="events">
-            <template #marker>
-              <span
-                class="block w-5 h-5 bg-neutral-100 border border-stone-700"></span>
-            </template>
-            <template #content="slotprops">
-              {{ slotprops.item.status }}
-            </template>
-          </Timeline>
-        </template>
-      </Column>
-
       <Column
         field="published"
         header="Status"
@@ -441,9 +419,3 @@ onMounted(() => fetchData());
     </Dialog>
   </div>
 </template>
-
-<style>
-.p-timeline-event-opposite {
-  display: none;
-}
-</style>
