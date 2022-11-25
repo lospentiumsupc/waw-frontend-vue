@@ -48,7 +48,7 @@ const deleteDialogVisible = ref(false);
 const pendingDeletion = ref();
 
 const events = [
-  { status: "No applied", color: "#444" },
+  { status: "Not applied", color: "#444" },
   { status: "Applied", color: "#FFF" },
   { status: "Accepted", color: "#FFF" },
   { status: "Rejected", color: "#FFF" },
@@ -283,7 +283,7 @@ onMounted(() => fetchData());
         :sortable="true"
         class="px-6 py-3 text-xs w-64" />
 
-      <Column field="progress" header="Progress" header-class="h-50">
+      <Column field="progress" header="Progress" class="px-6 py-3 text-xs w-48">
         <template #body>
           <Timeline :value="events">
             <template #marker>
@@ -441,3 +441,9 @@ onMounted(() => fetchData());
     </Dialog>
   </div>
 </template>
+
+<style>
+.p-timeline-event-opposite {
+  display: none;
+}
+</style>
