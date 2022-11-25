@@ -2,13 +2,15 @@
 import Avatar from "primevue/avatar";
 import { PrimeIcons } from "primevue/api";
 import { useAuth } from "@/accounts/services/auth.service";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useRouter } from "vue-router";
 import { toLocaleMonth } from "@/core/utils/months";
+import Rating from "primevue/rating";
 
 const auth = useAuth();
 
 const router = useRouter();
+const profile = ref();
 
 onBeforeMount(() => {
   if (!auth.loggedIn) {
@@ -206,6 +208,9 @@ const getDisplayableExpDates = (startDate, endDate) => {
             class="bg-white text-gray-900 font-medium py-1 px-4 border border-gray-400 rounded-lg tracking-wide mr-1 hover:bg-gray-100"
             value="Post Comment" />
         </div>
+      </div>
+      <div class="p-8 bg-white space-y-4">
+        <Rating v-model="profile" :cancel="false"></Rating>
       </div>
     </div>
   </div>
