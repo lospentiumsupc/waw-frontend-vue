@@ -8,6 +8,7 @@ import InputText from "primevue/inputtext";
 import InputSwitch from "primevue/inputswitch";
 import TextArea from "primevue/textarea";
 import Dialog from "primevue/dialog";
+import Timeline from "primevue/timeline";
 import {
   PrimeIcons,
   FilterMatchMode,
@@ -284,14 +285,15 @@ onMounted(() => fetchData());
 
       <Column field="progress" header="Progress" header-class="h-50">
         <template #body>
-          <pv-timeline :value="events">
-            <template #marker="slotprops">
-              <span class="status-circle" style="background-color: #eee"></span>
+          <Timeline :value="events">
+            <template #marker>
+              <span
+                class="block w-5 h-5 bg-neutral-100 border border-stone-700"></span>
             </template>
             <template #content="slotprops">
               {{ slotprops.item.status }}
             </template>
-          </pv-timeline>
+          </Timeline>
         </template>
       </Column>
 
@@ -439,12 +441,3 @@ onMounted(() => fetchData());
     </Dialog>
   </div>
 </template>
-<style scoped>
-.status-circle {
-  display: block;
-  width: 20px;
-  height: 20px;
-  border: 1px solid #444;
-  border-radius: 50%;
-}
-</style>
